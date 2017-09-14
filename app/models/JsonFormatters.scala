@@ -15,6 +15,12 @@ object JsonFormatters {
   implicit val formatToken = Json.format[Token]
   implicit val formatDelegatedAuthority = Json.format[DelegatedAuthority]
 
+  implicit val formatClientSecret = Json.format[ClientSecret]
+  implicit val formatEnvironmentToken = Json.format[EnvironmentToken]
+  implicit val formatApplicationTokens = Json.format[ApplicationTokens]
+  implicit val formatApplicationUrls = Json.format[ApplicationUrls]
+  implicit val formatApplication = Json.format[Application]
+
   implicit val errorResponseWrites = new Writes[ErrorResponse] {
     def writes(e: ErrorResponse): JsValue = Json.obj("code" -> e.errorCode, "message" -> e.message)
   }
