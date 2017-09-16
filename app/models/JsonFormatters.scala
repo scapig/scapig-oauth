@@ -11,9 +11,14 @@ object JsonFormatters {
   implicit val dateFormat: Format[DateTime] = Format[DateTime](dateRead, dateWrite)
 
   implicit val formatAuthType = EnumJson.enumFormat(AuthType)
-  implicit val formatAuthorityRequest = Json.format[AuthorityRequest]
+  implicit val formatDelegatedAuthorityRequest = Json.format[DelegatedAuthorityRequest]
   implicit val formatToken = Json.format[Token]
   implicit val formatDelegatedAuthority = Json.format[DelegatedAuthority]
+
+  implicit val formatCreateRequestedAuthorityRequest = Json.format[CreateRequestedAuthorityRequest]
+  implicit val formatAuthorizationCode = Json.format[AuthorizationCode]
+  implicit val formatRequestedAuthority = Json.format[RequestedAuthority]
+  implicit val formatCompleteRequestedAuthorityRequest = Json.format[CompleteRequestedAuthorityRequest]
 
   implicit val formatClientSecret = Json.format[ClientSecret]
   implicit val formatEnvironmentToken = Json.format[EnvironmentToken]

@@ -1,10 +1,8 @@
 package models
 
-import java.util.UUID
-
 import org.joda.time.DateTime
 
-case class AuthorityRequest(clientId: String,
+case class DelegatedAuthorityRequest(clientId: String,
                             userId: String,
                             scopes: Set[String],
                             authType: AuthType.AuthType)

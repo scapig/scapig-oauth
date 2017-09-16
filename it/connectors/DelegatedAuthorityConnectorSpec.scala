@@ -4,10 +4,9 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
-import models.{AuthType, AuthorityRequest, DelegatedAuthority, Token}
+import models._
 import org.joda.time.DateTime
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.Json
 import play.mvc.Http.Status
 import utils.UnitSpec
 import models.JsonFormatters._
@@ -20,7 +19,7 @@ class DelegatedAuthorityConnectorSpec extends UnitSpec with BeforeAndAfterAll wi
 
   val application = new GuiceApplicationBuilder().build()
 
-  val request = AuthorityRequest("clientId", "userId", Set("scope1"), AuthType.PRODUCTION)
+  val request = DelegatedAuthorityRequest("clientId", "userId", Set("scope1"), AuthType.PRODUCTION)
   val token = Token(DateTime.now(), request.scopes, "accessToken", "refreshToken")
 
   val delegatedAuthority = DelegatedAuthority(request.clientId, request.userId, request.authType, token, DateTime.now())
@@ -64,4 +63,5 @@ class DelegatedAuthorityConnectorSpec extends UnitSpec with BeforeAndAfterAll wi
       intercept[RuntimeException]{await(delegatedAuthorityConnector.createAuthority(request))}
     }
   }
+
 }
