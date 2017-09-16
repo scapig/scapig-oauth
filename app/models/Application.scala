@@ -1,16 +1,15 @@
 package models
 
-case class Application(name: String,
-                       applicationUrls: ApplicationUrls,
-                       tokens: ApplicationTokens)
+import java.util.UUID
+
+import models.AuthType.AuthType
+
+case class EnvironmentApplication(id: UUID,
+                                  name: String,
+                                  environment: AuthType,
+                                  description: String,
+                                  applicationUrls: ApplicationUrls)
 
 case class ApplicationUrls(redirectUris: Seq[String])
 
-case class ApplicationTokens(production: EnvironmentToken,
-                             sandbox: EnvironmentToken)
-
-case class EnvironmentToken(clientId: String,
-                            serverToken: String,
-                            clientSecrets: Seq[ClientSecret])
-
-case class ClientSecret(secret: String)
+case class AuthenticateRequest(clientId: String, clientSecret: String)
