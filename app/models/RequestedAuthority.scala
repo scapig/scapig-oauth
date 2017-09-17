@@ -7,7 +7,7 @@ import org.joda.time.DateTime
 case class CreateRequestedAuthorityRequest(clientId: String,
                                            scopes: Seq[String],
                                            redirectUri: String,
-                                           authType: AuthType.AuthType)
+                                           environment: Environment.Environment)
 
 case class CompleteRequestedAuthorityRequest(userId: String)
 
@@ -15,7 +15,7 @@ case class RequestedAuthority(id: UUID,
                               clientId: String,
                               scopes: Seq[String],
                               redirectUri: String,
-                              authType: AuthType.AuthType,
+                              environment: Environment.Environment,
                               code: Option[AuthorizationCode] = None,
                               userId: Option[String] = None)
 

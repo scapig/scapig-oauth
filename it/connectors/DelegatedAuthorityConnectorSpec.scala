@@ -19,10 +19,8 @@ class DelegatedAuthorityConnectorSpec extends UnitSpec with BeforeAndAfterAll wi
 
   val application = new GuiceApplicationBuilder().build()
 
-  val request = DelegatedAuthorityRequest("clientId", "userId", Set("scope1"), AuthType.PRODUCTION)
-  val token = Token(DateTime.now(), request.scopes, "accessToken", "refreshToken")
-
-  val delegatedAuthority = DelegatedAuthority(request.clientId, request.userId, request.authType, token, DateTime.now())
+  val request = DelegatedAuthorityRequest("clientId", "userId", Seq("scope1", "scope2"), Environment.PRODUCTION)
+  val tokenResponse = TokenResponse("accessToken", "refreshToken", 14400, "scope1 scope2")
 
   trait Setup {
     val delegatedAuthorityConnector = application.injector.instanceOf[DelegatedAuthorityConnector]
@@ -41,26 +39,26 @@ class DelegatedAuthorityConnectorSpec extends UnitSpec with BeforeAndAfterAll wi
     WireMock.reset()
   }
 
-  "createAuthority" should {
-    "return the authority with the token" in new Setup {
+  "createToken" should {
+    "return the token" in new Setup {
 
-      stubFor(post("/authority").withRequestBody(equalToJson(toJson(request).toString())).willReturn(
+      stubFor(post("/token").withRequestBody(equalToJson(toJson(request).toString())).willReturn(
         aResponse()
           .withStatus(Status.OK)
-          .withBody(toJson(delegatedAuthority).toString())))
+          .withBody(toJson(tokenResponse).toString())))
 
-      val result = await(delegatedAuthorityConnector.createAuthority(request))
+      val result = await(delegatedAuthorityConnector.createToken(request))
 
-      result shouldBe delegatedAuthority
+      result shouldBe tokenResponse
     }
 
     "throw an exception when error" in new Setup {
 
-      stubFor(post("/authority").withRequestBody(equalToJson(toJson(request).toString())).willReturn(
+      stubFor(post("/token").withRequestBody(equalToJson(toJson(request).toString())).willReturn(
         aResponse()
           .withStatus(Status.INTERNAL_SERVER_ERROR)))
 
-      intercept[RuntimeException]{await(delegatedAuthorityConnector.createAuthority(request))}
+      intercept[RuntimeException]{await(delegatedAuthorityConnector.createToken(request))}
     }
   }
 

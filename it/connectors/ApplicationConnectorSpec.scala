@@ -24,7 +24,7 @@ class ApplicationConnectorSpec extends UnitSpec with BeforeAndAfterAll with Befo
   val clientId = "aClientId"
   val clientSecret = "aClientSecret"
   val authenticateRequest = AuthenticateRequest(clientId, clientSecret)
-  val application = EnvironmentApplication(UUID.randomUUID(), "appName", AuthType.PRODUCTION, "description", ApplicationUrls(Seq("/redirectUris")))
+  val application = EnvironmentApplication(UUID.randomUUID(), "appName", Environment.PRODUCTION, "description", ApplicationUrls(Seq("/redirectUris")))
 
   override def beforeAll {
     configureFor(port)
@@ -84,18 +84,16 @@ class ApplicationConnectorSpec extends UnitSpec with BeforeAndAfterAll with Befo
 
       val result = await(applicationConnector.authenticate(clientId, clientSecret))
 
-      result shouldBe Some(application)
+      result shouldBe application
     }
 
-    "return None when the clientId does not match any application" in new Setup {
+    "fail with ApplicationNotFound when the clientId does not match any application" in new Setup {
 
       stubFor(post("/application/authenticate").withRequestBody(equalToJson(toJson(authenticateRequest).toString()))
         .willReturn(aResponse()
         .withStatus(Status.UNAUTHORIZED)))
 
-      val result = await(applicationConnector.authenticate(clientId, clientSecret))
-
-      result shouldBe None
+      intercept[ApplicationNotFound]{await(applicationConnector.authenticate(clientId, clientSecret))}
     }
 
     "throw an exception when error" in new Setup {

@@ -3,18 +3,24 @@ package models
 import org.joda.time.DateTime
 
 case class DelegatedAuthorityRequest(clientId: String,
-                            userId: String,
-                            scopes: Set[String],
-                            authType: AuthType.AuthType)
+                                     userId: String,
+                                     scopes: Seq[String],
+                                     environment : Environment.Environment)
 
-object AuthType extends Enumeration {
-  type AuthType = Value
+object DelegatedAuthorityRequest {
+  def apply(requestedAuthority: RequestedAuthority): DelegatedAuthorityRequest = DelegatedAuthorityRequest(requestedAuthority.clientId,
+    requestedAuthority.userId.getOrElse(throw new RuntimeException("userId needs to be defined to create delegated authority")),
+    requestedAuthority.scopes, requestedAuthority.environment)
+}
+
+object Environment extends Enumeration {
+  type Environment = Value
   val PRODUCTION, SANDBOX = Value
 }
 
 case class DelegatedAuthority(clientId: String,
                               userId: String,
-                              authType: AuthType.AuthType,
+                              environment: Environment.Environment,
                               token: Token,
                               expiresAt: DateTime)
 

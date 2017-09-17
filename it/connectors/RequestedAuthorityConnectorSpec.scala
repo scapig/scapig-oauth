@@ -19,10 +19,10 @@ class RequestedAuthorityConnectorSpec extends UnitSpec with BeforeAndAfterAll wi
   val wireMockServer = new WireMockServer(wireMockConfig().port(port))
   val application = new GuiceApplicationBuilder().build()
 
-  val createRequest = CreateRequestedAuthorityRequest("clientId", Seq("scope1"), "/redirectUri", AuthType.PRODUCTION)
+  val createRequest = CreateRequestedAuthorityRequest("clientId", Seq("scope1"), "/redirectUri", Environment.PRODUCTION)
 
   val requestedAuthorityId = UUID.randomUUID()
-  val requestedAuthority = RequestedAuthority(requestedAuthorityId, createRequest.clientId, createRequest.scopes, createRequest.redirectUri, createRequest.authType)
+  val requestedAuthority = RequestedAuthority(requestedAuthorityId, createRequest.clientId, createRequest.scopes, createRequest.redirectUri, createRequest.environment)
 
   val completeRequest = CompleteRequestedAuthorityRequest(userId = "userId")
   val authorizationCode = "abcde"
@@ -105,7 +105,7 @@ class RequestedAuthorityConnectorSpec extends UnitSpec with BeforeAndAfterAll wi
       result shouldBe Some(requestedAuthority)
     }
 
-    "return None" in new Setup {
+    "fail with RequestedAuthorityNotFound when no authority matches" in new Setup {
       stubFor(get(s"/authority/$id").willReturn(
         aResponse()
           .withStatus(Status.NOT_FOUND)))
@@ -134,17 +134,15 @@ class RequestedAuthorityConnectorSpec extends UnitSpec with BeforeAndAfterAll wi
 
       val result = await(requestedAuthorityConnector.fetchByCode(authorizationCode))
 
-      result shouldBe Some(completedRequestedAuthority)
+      result shouldBe completedRequestedAuthority
     }
 
-    "return None" in new Setup {
+    "fail with RequestedAuthorityNotFound when authority can not be found" in new Setup {
       stubFor(get(urlPathEqualTo(s"/authority")).withQueryParam("code", equalTo(authorizationCode)).willReturn(
         aResponse()
           .withStatus(Status.NOT_FOUND)))
 
-      val result = await(requestedAuthorityConnector.fetchByCode(authorizationCode))
-
-      result shouldBe None
+      intercept[RequestedAuthorityNotFound]{await(requestedAuthorityConnector.fetchByCode(authorizationCode))}
     }
 
     "fail when the request returns an error" in new Setup {

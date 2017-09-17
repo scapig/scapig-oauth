@@ -10,10 +10,11 @@ object JsonFormatters {
   implicit val dateWrite: Writes[DateTime] = JodaWrites.jodaDateWrites(datePattern)
   implicit val dateFormat: Format[DateTime] = Format[DateTime](dateRead, dateWrite)
 
-  implicit val formatAuthType = EnumJson.enumFormat(AuthType)
+  implicit val formatEnvironment = EnumJson.enumFormat(Environment)
   implicit val formatDelegatedAuthorityRequest = Json.format[DelegatedAuthorityRequest]
   implicit val formatToken = Json.format[Token]
   implicit val formatDelegatedAuthority = Json.format[DelegatedAuthority]
+  implicit val formatTokenResponse = Json.format[TokenResponse]
 
   implicit val formatCreateRequestedAuthorityRequest = Json.format[CreateRequestedAuthorityRequest]
   implicit val formatAuthorizationCode = Json.format[AuthorizationCode]

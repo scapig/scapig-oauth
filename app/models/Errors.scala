@@ -20,6 +20,9 @@ class ValidationException(message: String) extends RuntimeException(message)
 case class OAuthError(error: OAuthErrorCode.Value, errorDescription: String, state: Option[String] = None)
 case class OauthUnauthorizedException(oauthError: OAuthError) extends Exception
 
+case class ApplicationNotFound() extends Exception
+case class RequestedAuthorityNotFound() extends Exception
+
 object OAuthErrorCode extends Enumeration {
 
   type OAuthErrorCode = Value

@@ -2,11 +2,11 @@ package models
 
 import java.util.UUID
 
-import models.AuthType.AuthType
+import models.Environment.Environment
 
 case class EnvironmentApplication(id: UUID,
                                   name: String,
-                                  environment: AuthType,
+                                  environment: Environment,
                                   description: String,
                                   applicationUrls: ApplicationUrls)
 
