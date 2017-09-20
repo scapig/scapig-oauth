@@ -19,6 +19,7 @@ class ValidationException(message: String) extends RuntimeException(message)
 
 case class OAuthError(error: OAuthErrorCode.Value, errorDescription: String, state: Option[String] = None)
 case class OauthUnauthorizedException(oauthError: OAuthError) extends Exception
+case class OauthValidationException(oauthError: OAuthError) extends Exception
 
 case class ApplicationNotFound() extends Exception
 case class RequestedAuthorityNotFound() extends Exception
@@ -37,6 +38,8 @@ object OAuthErrorCode extends Enumeration {
 }
 
 object OAuthError {
+  val invalidCode = OAuthError(OAuthErrorCode.INVALID_REQUEST, "code is invalid")
+  val invalidRedirectUri = OAuthError(OAuthErrorCode.INVALID_REQUEST, "redirect_uri is invalid")
   val invalidClientOrSecret = OAuthError(OAuthErrorCode.INVALID_CLIENT, "invalid client id or secret")
   val invalidRefreshToken = OAuthError(OAuthErrorCode.INVALID_REQUEST, "refresh_token is invalid")
   val unauthorizedClient = OAuthError(OAuthErrorCode.UNAUTHORIZED_CLIENT, "client id invalid for the client_credentials grant type")

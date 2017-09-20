@@ -15,10 +15,18 @@ class TokenService @Inject()(requestedAuthorityConnector: RequestedAuthorityConn
                              scopeConnector: ScopeConnector) {
 
   def createToken(tokenRequest: TokenRequest): Future[TokenResponse] = {
-    for {
-      environmentApplication <- applicationConnector.authenticate(tokenRequest.clientId, tokenRequest.clientSecret)
+    val future = for {
+      _ <- applicationConnector.authenticate(tokenRequest.clientId, tokenRequest.clientSecret)
       requestedAuthority <- requestedAuthorityConnector.fetchByCode(tokenRequest.code)
-      delegatedAuthority <- delegatedAuthorityConnector.createToken(DelegatedAuthorityRequest(requestedAuthority))
-    } yield delegatedAuthority
+      _ = if (requestedAuthority.clientId.trim != tokenRequest.clientId) throw OauthUnauthorizedException(OAuthError.invalidClientOrSecret)
+      _ = if (requestedAuthority.redirectUri != tokenRequest.redirectUri) throw OauthValidationException(OAuthError.invalidRedirectUri)
+      token <- delegatedAuthorityConnector.createToken(DelegatedAuthorityRequest(requestedAuthority))
+      _ = requestedAuthorityConnector.delete(requestedAuthority.id.toString)
+    } yield token
+
+    future recover {
+      case _: ApplicationNotFound => throw OauthUnauthorizedException(OAuthError.invalidClientOrSecret)
+      case _: RequestedAuthorityNotFound => throw OauthValidationException(OAuthError.invalidCode)
+    }
   }
 }

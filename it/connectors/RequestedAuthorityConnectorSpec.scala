@@ -154,4 +154,27 @@ class RequestedAuthorityConnectorSpec extends UnitSpec with BeforeAndAfterAll wi
     }
 
   }
+
+  "delete" should {
+
+    "delete the requested authority" in new Setup {
+      stubFor(delete(urlPathEqualTo(s"/authority/$requestedAuthorityId")).willReturn(
+        aResponse()
+          .withStatus(Status.NO_CONTENT)))
+
+      val result: Unit = await(requestedAuthorityConnector.delete(requestedAuthorityId.toString))
+
+      result shouldBe ()
+    }
+
+    "fail when tapi-requested-authority fails" in new Setup {
+      stubFor(delete(urlPathEqualTo(s"/authority/$requestedAuthorityId")).willReturn(
+        aResponse()
+          .withStatus(Status.INTERNAL_SERVER_ERROR)))
+
+      intercept[RuntimeException] {
+        await(requestedAuthorityConnector.delete(requestedAuthorityId.toString))
+      }
+    }
+  }
 }

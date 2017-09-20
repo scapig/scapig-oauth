@@ -7,6 +7,7 @@ import models._
 import play.api.libs.json.Json
 import play.api.libs.ws.{WSClient, WSResponse}
 import models.JsonFormatters._
+import play.api.http.Status
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -33,6 +34,13 @@ class RequestedAuthorityConnector @Inject()(appContext: AppContext, wsClient: WS
     wsClient.url(s"$serviceUrl/authority/$id").get() map {
       case response if response.status == 200 => Json.parse(response.body).asOpt[RequestedAuthority]
       case response if response.status == 404 => None
+      case r: WSResponse => throw new RuntimeException(s"Invalid response from requested-authority ${r.status} ${r.body}")
+    }
+  }
+
+  def delete(id: String): Future[Unit] = {
+    wsClient.url(s"$serviceUrl/authority/$id").delete() map {
+      case response if response.status == Status.NO_CONTENT => ()
       case r: WSResponse => throw new RuntimeException(s"Invalid response from requested-authority ${r.status} ${r.body}")
     }
   }
