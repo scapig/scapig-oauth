@@ -30,4 +30,15 @@ object JsonFormatters {
   implicit val errorResponseWrites = new Writes[ErrorResponse] {
     def writes(e: ErrorResponse): JsValue = Json.obj("code" -> e.errorCode, "message" -> e.message)
   }
+
+  implicit val write = new Writes[OAuthError] {
+    def writes(oauthError: OAuthError): JsValue = {
+      val json = Json.obj(
+        "error" -> oauthError.error.toString,
+        "error_description" -> oauthError.errorDescription
+      )
+      oauthError.state.fold(json)({ st => json ++ Json.obj("state" -> st) })
+    }
+  }
+
 }
