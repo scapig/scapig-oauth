@@ -9,6 +9,7 @@ case class CreateRequestedAuthorityRequest(clientId: String,
                                            redirectUri: String,
                                            environment: Environment.Environment)
 
+
 case class CompleteRequestedAuthorityRequest(userId: String)
 
 case class RequestedAuthority(id: UUID,

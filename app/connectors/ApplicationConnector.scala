@@ -15,10 +15,10 @@ class ApplicationConnector @Inject()(appContext: AppContext, wsClient: WSClient)
 
   val serviceUrl = appContext.serviceUrl("application")
 
-  def fetchByClientId(clientId: String): Future[Option[EnvironmentApplication]] = {
+  def fetchByClientId(clientId: String): Future[EnvironmentApplication] = {
     wsClient.url(s"$serviceUrl/application?clientId=$clientId").get() map {
-      case response if response.status == 200 => Json.parse(response.body).asOpt[EnvironmentApplication]
-      case response if response.status == 404 => None
+      case response if response.status == 200 => Json.parse(response.body).as[EnvironmentApplication]
+      case response if response.status == 404 => throw ApplicationNotFound()
       case r: WSResponse => throw new RuntimeException(s"Invalid response from application ${r.status} ${r.body}")
     }
   }

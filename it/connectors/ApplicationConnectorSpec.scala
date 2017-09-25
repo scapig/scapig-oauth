@@ -52,17 +52,15 @@ class ApplicationConnectorSpec extends UnitSpec with BeforeAndAfterAll with Befo
 
       val result = await(applicationConnector.fetchByClientId(clientId))
 
-      result shouldBe Some(application)
+      result shouldBe application
     }
 
-    "return None when the clientId does not match any application" in new Setup {
+    "fail with ApplicationNotFound when the clientId does not match any application" in new Setup {
 
       stubFor(get(s"/application?clientId=$clientId").willReturn(aResponse()
         .withStatus(Status.NOT_FOUND)))
 
-      val result = await(applicationConnector.fetchByClientId(clientId))
-
-      result shouldBe None
+      intercept[ApplicationNotFound]{await(applicationConnector.fetchByClientId(clientId))}
     }
 
     "throw an exception when error" in new Setup {
