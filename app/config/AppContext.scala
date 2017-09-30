@@ -13,4 +13,6 @@ class AppContext @Inject()(configuration: Configuration) {
     val port = configuration.get[String](s"services.$serviceName.port")
     s"$method://$host:$port"
   }
+
+  val loginUrl = configuration.get[String]("loginUrl")
 }

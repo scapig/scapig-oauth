@@ -1,0 +1,38 @@
+
+@(grantAuthority: GrantAuthority, username: String, maybeState: Option[String] = None)(implicit request: Request[_]) {
+
+    <html>
+        <head><title>Grant Scope</title></head>
+        <body>
+            <div class="content__body">
+                <h1>Authority to interact on your behalf</h1>
+
+                <p>The <strong>@grantAuthority.application.name</strong> software application is requesting to do the following:</p>
+
+                <div class="form-field">
+                    <ul>
+                    @grantAuthority.scopes.map { scope =>
+                        <li class="bullets">@scope.name</li>
+                    }
+                    </ul>
+                </div>
+
+                <p>It will be able to do the above for 18 months from when you grant authority.</p>
+
+                @helper.form(action = Call("POST", "/oauth/grantscope")) {
+
+                    @helper.CSRF.formField
+                    <input type="hidden" name="auth_id" id="auth_id" value="@{grantAuthority.requestedAuthorityId}">
+                    @maybeState.map {st =>
+                        <input type="hidden" name="state" id="state" value="@st">
+                    }
+
+                    <div class="form-field">
+                        <button id="authorise" class="button" type="submit">Grant authority</button>
+                        <a id="deny" class="button button--link" href="/oauth/cancel?auth_id=@{grantAuthority.requestedAuthorityId}@maybeState.map {st =>&state=@st}" data-sso="false">Do not grant authority</a>
+                    </div>
+                }
+            </div>
+        </body>
+    </html>
+}
