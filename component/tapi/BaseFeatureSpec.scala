@@ -7,7 +7,7 @@ import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import org.scalatest._
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
-import tapi.stubs.{MockApplication, MockDelegatedAuthority, MockRequestedAuthority}
+import tapi.stubs.{MockApplication, MockDelegatedAuthority, MockRequestedAuthority, MockScope}
 
 import scala.concurrent.duration.Duration
 
@@ -24,7 +24,7 @@ with GivenWhenThen with BeforeAndAfterEach with BeforeAndAfterAll with GuiceOneS
   val serviceUrl = s"http://localhost:$port"
 
   val timeout = Duration(5, TimeUnit.SECONDS)
-  val mocks = Seq[MockHost](MockApplication, MockDelegatedAuthority, MockRequestedAuthority)
+  val mocks = Seq[MockHost](MockApplication, MockDelegatedAuthority, MockRequestedAuthority, MockScope)
 
   override protected def beforeEach(): Unit = {
     mocks.foreach(m => if (!m.server.isRunning) m.server.start())

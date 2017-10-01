@@ -1,18 +1,11 @@
 package models
 
-import models.OAuthErrorCode.UNSUPPORTED_RESPONSE_TYPE
 import play.api.mvc.QueryStringBindable
 
 case class AuthorizationRequest(clientId: String,
                                 redirectUri: String,
                                 scope: String,
-                                state: Option[String] = None,
-                                responseType: String = "code") {
-
-  if (!responseType.contains("code")) {
-    OauthValidationException(OAuthError(UNSUPPORTED_RESPONSE_TYPE, "response_type must be 'code'", state))
-  }
-}
+                                state: Option[String] = None)
 
 object AuthorizationRequest {
 
@@ -29,9 +22,10 @@ object AuthorizationRequest {
       Some(for {
         clientId <- extractRequired("client_id")
         responseType <- extractRequired("response_type")
+        _ = if(!responseType.equals("code")) Left("response_type must be 'code'") else Right()
         scope <- extractRequired("scope")
         redirectUri <- extractRequired("redirect_uri")
-      } yield AuthorizationRequest(clientId, redirectUri, scope, extract("state"), responseType))
+      } yield AuthorizationRequest(clientId, redirectUri, scope, extract("state")))
     }
 
     override def unbind(key: String, request: AuthorizationRequest): String = {
@@ -39,7 +33,7 @@ object AuthorizationRequest {
 
       Seq(format("client_id", request.clientId),
         format("scope", request.scope),
-        format("response_type", request.responseType),
+        format("response_type", "code"),
         format("redirect_uri", request.redirectUri),
         request.state.map(s => format("state", s))).mkString("&")
     }

@@ -35,7 +35,7 @@ class TokenSpec extends BaseFeatureSpec {
       MockApplication.willAuthenticateSucceed(clientId, clientSecret, application)
 
       And("a requested authority")
-      MockRequestedAuthority.willReturnRequestedAuthority(requestedAuthority)
+      MockRequestedAuthority.willReturnRequestedAuthorityForCode(requestedAuthority)
 
       And("creation of delegated authority succeed")
       MockDelegatedAuthority.willCreateToken(delegatedAuthorityRequest, tokenResponse)

@@ -81,9 +81,18 @@ class RequestedAuthorityConnectorSpec extends UnitSpec with BeforeAndAfterAll wi
       result shouldBe completedRequestedAuthority
     }
 
+    "throw RequestedAuthorityNotFound when the authority does not exist" in new Setup {
+
+      stubFor(post(s"/authority/$requestedAuthorityId").withRequestBody(equalToJson(toJson(completeRequest).toString())).willReturn(
+        aResponse()
+          .withStatus(Status.NOT_FOUND)))
+
+      intercept[RequestedAuthorityNotFound]{await(requestedAuthorityConnector.completeRequestedAuthority(requestedAuthorityId.toString, completeRequest))}
+    }
+
     "throw an exception when error" in new Setup {
 
-      stubFor(post("/authority").withRequestBody(equalToJson(toJson(completeRequest).toString())).willReturn(
+      stubFor(post(s"/authority/$requestedAuthorityId").withRequestBody(equalToJson(toJson(completeRequest).toString())).willReturn(
         aResponse()
           .withStatus(Status.INTERNAL_SERVER_ERROR)))
 
@@ -102,7 +111,7 @@ class RequestedAuthorityConnectorSpec extends UnitSpec with BeforeAndAfterAll wi
 
       val result = await(requestedAuthorityConnector.fetchById(id.toString))
 
-      result shouldBe Some(requestedAuthority)
+      result shouldBe requestedAuthority
     }
 
     "fail with RequestedAuthorityNotFound when no authority matches" in new Setup {
@@ -110,9 +119,7 @@ class RequestedAuthorityConnectorSpec extends UnitSpec with BeforeAndAfterAll wi
         aResponse()
           .withStatus(Status.NOT_FOUND)))
 
-      val result = await(requestedAuthorityConnector.fetchById(id.toString))
-
-      result shouldBe None
+     intercept[RequestedAuthorityNotFound]{await(requestedAuthorityConnector.fetchById(id.toString))}
     }
 
     "fail when the request returns an error" in new Setup {

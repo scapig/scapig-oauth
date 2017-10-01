@@ -3,4 +3,6 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 POST    /token                      @controllers.TokenController.createToken()
 
+GET     /authorize                  @controllers.AuthorizationController.authorize(authorizationRequest: models.AuthorizationRequest)
+
 GET     /grantscope                 @controllers.GrantScopeController.showGrantScope(reqAuthId, state: Option[String])

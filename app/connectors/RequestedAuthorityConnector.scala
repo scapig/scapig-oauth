@@ -26,14 +26,15 @@ class RequestedAuthorityConnector @Inject()(appContext: AppContext, wsClient: WS
   def completeRequestedAuthority(id: String, completeRequest: CompleteRequestedAuthorityRequest): Future[RequestedAuthority] = {
     wsClient.url(s"$serviceUrl/authority/$id").post(Json.toJson(completeRequest)) map {
       case response if response.status == 200 => Json.parse(response.body).as[RequestedAuthority]
+      case response if response.status == 404 => throw RequestedAuthorityNotFound()
       case r: WSResponse => throw new RuntimeException(s"Invalid response from requested-authority ${r.status} ${r.body}")
     }
   }
 
-  def fetchById(id: String): Future[Option[RequestedAuthority]] = {
+  def fetchById(id: String): Future[RequestedAuthority] = {
     wsClient.url(s"$serviceUrl/authority/$id").get() map {
-      case response if response.status == 200 => Json.parse(response.body).asOpt[RequestedAuthority]
-      case response if response.status == 404 => None
+      case response if response.status == 200 => Json.parse(response.body).as[RequestedAuthority]
+      case response if response.status == 404 => throw RequestedAuthorityNotFound()
       case r: WSResponse => throw new RuntimeException(s"Invalid response from requested-authority ${r.status} ${r.body}")
     }
   }

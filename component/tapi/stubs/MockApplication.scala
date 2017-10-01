@@ -19,4 +19,15 @@ object MockApplication extends MockHost(7000) {
       )
     )
   }
+
+  def willReturnApplication(clientId: String, application: EnvironmentApplication) = {
+    mock.register(get(urlPathEqualTo("/application")).withQueryParam("clientId", equalTo(clientId))
+      .willReturn(
+        aResponse()
+          .withStatus(OK)
+          .withBody(toJson(application).toString())
+      )
+    )
+  }
+
 }
