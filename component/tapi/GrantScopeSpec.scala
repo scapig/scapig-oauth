@@ -17,10 +17,11 @@ class GrantScopeSpec extends BaseFeatureSpec {
   val state = "aState"
   val userId = "aUser"
   val redirectUri = "http://myApp/redirect"
+  val authorizationCode = "aCode"
   val scopes = Seq(Scope(scope, "view profile", "view first name, last name and address"))
   val application = EnvironmentApplication(UUID.randomUUID(), "appName", PRODUCTION, "description", ApplicationUrls(Seq("http://myApp")))
   val requestedAuthority = RequestedAuthority(UUID.randomUUID(), clientId, Seq(scope), redirectUri, application.environment)
-  val completedRequestedAuthority = requestedAuthority.copy(userId = Some(userId), code = Some(AuthorizationCode("aCode")))
+  val completedRequestedAuthority = requestedAuthority.copy(userId = Some(userId), code = Some(AuthorizationCode(authorizationCode)))
 
   feature("show grantscope") {
 
@@ -87,11 +88,12 @@ class GrantScopeSpec extends BaseFeatureSpec {
       val response = Http(s"$serviceUrl/grantscope")
         .postForm(Seq(("reqAuthId", requestedAuthority.id.toString), ("state", state)))
         .cookie("PLAY_SESSION", cookie.value)
+        .header("Csrf-Token", "nocheck")
         .asString
 
       Then("I am redirected to the redirect uri with the code")
       response.code shouldBe Status.SEE_OTHER
-      response.header("Location") shouldBe Some(s"")
+      response.header("Location") shouldBe Some(s"http://myapp/redirect?code=$authorizationCode&state=$state")
 
     }
 
@@ -107,6 +109,7 @@ class GrantScopeSpec extends BaseFeatureSpec {
       When("I accept to grant authority")
       val response = Http(s"$serviceUrl/grantscope")
         .postForm(Seq(("reqAuthId", requestedAuthority.id.toString), ("state", state)))
+        .header("Csrf-Token", "nocheck")
         .asString
 
       Then("I am redirected to the login page")

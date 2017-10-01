@@ -85,7 +85,7 @@ class GrantScopeControllerSpec extends UnitSpec with MockitoSugar with BeforeAnd
   "acceptGrantScope" should {
     "redirect to the redirectUri with the code" in new Setup {
       val loggedInRequest = request
-        .withFormUrlEncodedBody("auth_id" -> requestedAuthorityId, "state" -> "aState")
+        .withFormUrlEncodedBody("reqAuthId" -> requestedAuthorityId, "state" -> "aState")
         .withSession("userId" -> userId)
 
       given(grantScopeService.completeRequestedAuthority(requestedAuthorityId, userId)).willReturn(successful(completedRequestedAuthority))
@@ -97,7 +97,7 @@ class GrantScopeControllerSpec extends UnitSpec with MockitoSugar with BeforeAnd
     }
 
     "redirect to the login page when the user is not logged in" in new Setup {
-      val loggedOutRequest = request.withFormUrlEncodedBody("auth_id" -> requestedAuthorityId, "state" -> "aState")
+      val loggedOutRequest = request.withFormUrlEncodedBody("reqAuthId" -> requestedAuthorityId, "state" -> "aState")
 
       val result = await(underTest.acceptGrantScope()(loggedOutRequest))
 
@@ -105,7 +105,7 @@ class GrantScopeControllerSpec extends UnitSpec with MockitoSugar with BeforeAnd
       result.header.headers.get("Location") shouldBe Some(s"http://loginpage?continue=%2Fgrantscope%3FreqAuthId%3D$requestedAuthorityId%26state%3DaState")
     }
 
-    "fail with BAD_REQUEST when the auth_id is absent" in new Setup {
+    "fail with BAD_REQUEST when the reqAuthId is absent" in new Setup {
       val requestWithoutAuthId = request.withFormUrlEncodedBody()
 
       val result = await(underTest.acceptGrantScope()(requestWithoutAuthId))
@@ -123,7 +123,7 @@ class GrantScopeControllerSpec extends UnitSpec with MockitoSugar with BeforeAnd
 
     "fail with UNPROCESSABLE_ENTITY when the requested authority is invalid or has timed out" in new Setup {
       val loggedInRequest = request
-        .withFormUrlEncodedBody("auth_id" -> requestedAuthorityId, "state" -> "aState")
+        .withFormUrlEncodedBody("reqAuthId" -> requestedAuthorityId, "state" -> "aState")
         .withSession("userId" -> userId)
 
       given(grantScopeService.completeRequestedAuthority(requestedAuthorityId, userId)).willReturn(failed(RequestedAuthorityNotFound()))

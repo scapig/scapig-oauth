@@ -6,3 +6,5 @@ POST    /token                      @controllers.TokenController.createToken()
 GET     /authorize                  @controllers.AuthorizationController.authorize(authorizationRequest: models.AuthorizationRequest)
 
 GET     /grantscope                 @controllers.GrantScopeController.showGrantScope(reqAuthId, state: Option[String])
+
+POST    /grantscope                 @controllers.GrantScopeController.acceptGrantScope()

@@ -39,7 +39,7 @@ class GrantScopeController @Inject()(cc: ControllerComponents, grantScopeService
     def accept = { form: Map[String, Seq[String]]  =>
       val state = form.get("state").flatMap(_.headOption)
 
-      (form.get("auth_id").map(_.head), request.session.get("userId")) match {
+      (form.get("reqAuthId").map(_.head), request.session.get("userId")) match {
         case (Some(reqAuthId), Some(userId)) => completeRequestedAuthority(reqAuthId, userId, state)
         case (Some(reqAuthId), _) => successful(Redirect(fullLoginUrl(reqAuthId, state)))
         case (_, _) => Future.successful(BadRequest(views.html.errorTemplate("", "", "Authority request id not found.")))

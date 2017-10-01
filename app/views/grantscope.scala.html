@@ -22,14 +22,14 @@
                 @helper.form(action = Call("POST", "/oauth/grantscope")) {
 
                     @helper.CSRF.formField
-                    <input type="hidden" name="auth_id" id="auth_id" value="@{grantAuthority.requestedAuthorityId}">
+                    <input type="hidden" name="reqAuthId" id="reqAuthId" value="@{grantAuthority.requestedAuthorityId}">
                     @maybeState.map {st =>
                         <input type="hidden" name="state" id="state" value="@st">
                     }
 
                     <div class="form-field">
                         <button id="authorise" class="button" type="submit">Grant authority</button>
-                        <a id="deny" class="button button--link" href="/oauth/cancel?auth_id=@{grantAuthority.requestedAuthorityId}@maybeState.map {st =>&state=@st}" data-sso="false">Do not grant authority</a>
+                        <a id="deny" class="button button--link" href="/oauth/cancel?reqAuthId=@{grantAuthority.requestedAuthorityId}@maybeState.map {st =>&state=@st}" data-sso="false">Do not grant authority</a>
                     </div>
                 }
             </div>
