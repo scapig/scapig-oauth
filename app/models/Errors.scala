@@ -21,6 +21,8 @@ case class OAuthError(error: OAuthErrorCode.Value, errorDescription: String, sta
 case class OauthUnauthorizedException(oauthError: OAuthError) extends Exception
 case class OauthValidationException(oauthError: OAuthError) extends Exception
 
+case class ErrorInternalServerError(errorMessage: String) extends ErrorResponse(INTERNAL_SERVER_ERROR, "INTERNAL_SERVER_ERROR", errorMessage)
+
 case class ApplicationNotFound() extends Exception
 case class RequestedAuthorityNotFound() extends Exception
 
