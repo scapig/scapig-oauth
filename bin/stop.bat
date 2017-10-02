@@ -2,8 +2,8 @@
 
 REM environment variable TAPI_REPOSITORY must be set
 
-set projectdir=%1
-set PID_PATH=%TAPI_REPOSITORY%\%projectdir%\RUNNING_PID
+set PROJECT_NAME=%1
+set PID_PATH=C:\temp\stage_%PROJECT_NAME%\RUNNING_PID
 
 if exist %PID_PATH% (
   setlocal EnableDelayedExpansion

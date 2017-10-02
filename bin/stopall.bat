@@ -16,4 +16,5 @@
   (stop.bat tapi-requested-authority)
   echo stopping tapi-oauth
   (stop.bat tapi-oauth)
+  endlocal
 )

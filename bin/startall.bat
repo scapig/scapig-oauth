@@ -5,18 +5,18 @@ REM environment variable TAPI_REPOSITORY must be set
 (
   setlocal EnableDelayedExpansion
   echo starting tapi-api-definition
-  (cd %TAPI_REPOSITORY%/tapi-api-definition && activator "start 7000")
+  (start.bat tapi-api-definition 7000)
   echo starting tapi-api-scope
-  (cd %TAPI_REPOSITORY%/tapi-api-scope && sbt activator "start 7010")
+  (start.bat tapi-api-scope 7010)
   echo starting tapi-application
-  (cd %TAPI_REPOSITORY%/tapi-application && activator "start 7020")
+  (start.bat tapi-application 7020)
   echo starting tapi-delegated-authority
-  (cd %TAPI_REPOSITORY%/tapi-delegated-authority && activator "start 7030")
+  (start.bat tapi-delegated-authority 7030)
   echo starting tapi-oauth
-  (cd %TAPI_REPOSITORY%/tapi-oauth && activator "start 7040")
+  (start.bat tapi-oauth 7040)
   echo starting tapi-oauth-login
-  (cd %TAPI_REPOSITORY%/tapi-oauth-login && activator "start 7050")
+  (start.bat tapi-oauth-login 7050)
   echo starting tapi-requested-authority
-  (cd %TAPI_REPOSITORY%/tapi-requested-authority && activator "start 7050")
+  (start.bat tapi-requested-authority 7060)
   endlocal
 )
