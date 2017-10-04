@@ -19,7 +19,7 @@
 
                 <p>It will be able to do the above for 18 months from when you grant authority.</p>
 
-                @helper.form(action = Call("POST", "/oauth/grantscope")) {
+                @helper.form(action = Call("POST", "/grantscope")) {
 
                     @helper.CSRF.formField
                     <input type="hidden" name="reqAuthId" id="reqAuthId" value="@{grantAuthority.requestedAuthorityId}">

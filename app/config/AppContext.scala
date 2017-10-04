@@ -15,4 +15,5 @@ class AppContext @Inject()(configuration: Configuration) {
   }
 
   val loginUrl = configuration.get[String]("loginUrl")
+  val oauthUrl = configuration.get[String]("oauthUrl")
 }

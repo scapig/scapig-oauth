@@ -60,7 +60,7 @@ class GrantScopeController @Inject()(cc: ControllerComponents, grantScopeService
 
   private def fullLoginUrl(reqAuthId: String, state: Option[String]) = {
     val grantScopeUrl = routes.GrantScopeController.showGrantScope(reqAuthId, state).url
-    val encodedContinueUrl = URLEncoder.encode(grantScopeUrl, "UTF-8")
+    val encodedContinueUrl = URLEncoder.encode(appContext.oauthUrl + grantScopeUrl, "UTF-8")
     s"${appContext.loginUrl}?continue=$encodedContinueUrl"
   }
 }
