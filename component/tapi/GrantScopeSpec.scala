@@ -21,7 +21,7 @@ class GrantScopeSpec extends BaseFeatureSpec {
   val scopes = Seq(Scope(scope, "view profile", "view first name, last name and address"))
   val application = EnvironmentApplication(UUID.randomUUID(), "appName", PRODUCTION, "description", ApplicationUrls(Seq("http://myApp")))
   val requestedAuthority = RequestedAuthority(UUID.randomUUID(), clientId, Seq(scope), redirectUri, application.environment)
-  val completedRequestedAuthority = requestedAuthority.copy(userId = Some(userId), code = Some(AuthorizationCode(authorizationCode)))
+  val completedRequestedAuthority = requestedAuthority.copy(userId = Some(userId), authorizationCode = Some(AuthorizationCode(authorizationCode)))
 
   feature("show grantscope") {
 
@@ -67,7 +67,7 @@ class GrantScopeSpec extends BaseFeatureSpec {
 
       Then("I am redirected to the login page")
       response.code shouldBe Status.SEE_OTHER
-      response.header("Location") shouldBe Some(s"http://localhost:8000/login?continue=%2Fgrantscope%3FreqAuthId%3D${requestedAuthority.id}%26state%3D$state")
+      response.header("Location") shouldBe Some(s"http://localhost:15000/login?continue=http%3A%2F%2Flocalhost%3A14680%2Fgrantscope%3FreqAuthId%3D${requestedAuthority.id}%26state%3D$state")
     }
 
   }
@@ -114,8 +114,30 @@ class GrantScopeSpec extends BaseFeatureSpec {
 
       Then("I am redirected to the login page")
       response.code shouldBe Status.SEE_OTHER
-      response.header("Location") shouldBe Some(s"http://localhost:8000/login?continue=%2Fgrantscope%3FreqAuthId%3D${requestedAuthority.id}%26state%3D$state")
+      response.header("Location") shouldBe Some(s"http://localhost:15000/login?continue=http%3A%2F%2Flocalhost%3A14680%2Fgrantscope%3FreqAuthId%3D${requestedAuthority.id}%26state%3D$state")
 
+    }
+
+  }
+
+  feature("cancel grantscope") {
+    scenario("logged in user") {
+      Given("a requested authority")
+      MockRequestedAuthority.willReturnRequestedAuthorityForId(requestedAuthority)
+
+      And("I am logged in")
+      val cookie = Session.encodeAsCookie(Session(Map("userId" -> userId)))
+
+      When("I cancel to grant authority")
+      val response = Http(s"$serviceUrl/cancel?reqAuthId=${requestedAuthority.id}&state=$state")
+        .postData("")
+        .cookie("PLAY_SESSION", cookie.value)
+        .header("Csrf-Token", "nocheck")
+        .asString
+
+      Then("I am redirected to the redirect uri with the ACCESS_DENIED error")
+      response.code shouldBe Status.FOUND
+      response.header("Location") shouldBe Some(s"http://myapp/redirect?error=ACCESS_DENIED&error_description=user+denied+the+authorization&state=$state")
     }
 
   }

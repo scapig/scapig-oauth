@@ -25,7 +25,7 @@ class TokenSpec extends BaseFeatureSpec {
     val requestBody = s"" +
       s"client_id=$clientId" +
       s"&client_secret=$clientSecret" +
-      s"&code=${requestedAuthority.code.get.code}" +
+      s"&code=${requestedAuthority.authorizationCode.get.code}" +
       s"&grant_type=authorization_code" +
       s"&redirect_uri=${requestedAuthority.redirectUri}"
 

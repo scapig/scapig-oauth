@@ -7,7 +7,7 @@ import play.api.libs.json.Json.toJson
 import tapi.MockHost
 import models.JsonFormatters._
 
-object MockDelegatedAuthority extends MockHost(7001) {
+object MockDelegatedAuthority extends MockHost(7002) {
 
   def willCreateToken(delegatedAuthorityRequest: DelegatedAuthorityRequest, tokenResponse: TokenResponse) = {
     mock.register(post(urlEqualTo(s"/token"))

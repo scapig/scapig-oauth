@@ -19,7 +19,7 @@ class GrantScopeServiceSpec extends UnitSpec with MockitoSugar {
   val application = EnvironmentApplication(randomUUID(), "myApp", PRODUCTION, "app description", ApplicationUrls(Seq("http://redirecturi")))
 
   val userId = "userId"
-  val completedRequestedAuthority = requestedAuthority.copy(userId = Some(userId), code = Some(AuthorizationCode("aCode")))
+  val completedRequestedAuthority = requestedAuthority.copy(userId = Some(userId), authorizationCode = Some(AuthorizationCode("aCode")))
 
   trait Setup {
     val requestedAuthorityConnector = mock[RequestedAuthorityConnector]
@@ -44,6 +44,22 @@ class GrantScopeServiceSpec extends UnitSpec with MockitoSugar {
       given(requestedAuthorityConnector.fetchById(requestedAuthorityId)).willReturn(failed(RequestedAuthorityNotFound()))
 
       intercept[RequestedAuthorityNotFound]{await(underTest.fetchGrantAuthority(requestedAuthorityId))}
+    }
+  }
+
+  "fetchRequestedAuthority" should {
+    "return the requested authority" in new Setup {
+      given(requestedAuthorityConnector.fetchById(requestedAuthorityId)).willReturn(successful(requestedAuthority))
+
+      val result = await(underTest.fetchRequestedAuthority(requestedAuthorityId))
+
+      result shouldBe requestedAuthority
+    }
+
+    "propagate RequestedAuthorityNotFound when the requested authority do not exist" in new Setup {
+      given(requestedAuthorityConnector.fetchById(requestedAuthorityId)).willReturn(failed(RequestedAuthorityNotFound()))
+
+      intercept[RequestedAuthorityNotFound]{await(underTest.fetchRequestedAuthority(requestedAuthorityId))}
     }
   }
 

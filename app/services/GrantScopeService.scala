@@ -22,6 +22,10 @@ class GrantScopeService @Inject()(requestedAuthorityConnector: RequestedAuthorit
 
   }
 
+  def fetchRequestedAuthority(requestedAuthorityId: String): Future[RequestedAuthority] = {
+    requestedAuthorityConnector.fetchById(requestedAuthorityId)
+  }
+
   def completeRequestedAuthority(requestedAuthorityId: String, userId: String): Future[RequestedAuthority] = {
     requestedAuthorityConnector.completeRequestedAuthority(requestedAuthorityId, CompleteRequestedAuthorityRequest(userId))
   }

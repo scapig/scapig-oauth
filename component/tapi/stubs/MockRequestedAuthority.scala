@@ -8,10 +8,10 @@ import models.JsonFormatters._
 import play.api.http.Status._
 import play.api.libs.json.Json
 
-object MockRequestedAuthority extends MockHost(7002) {
+object MockRequestedAuthority extends MockHost(7003) {
 
   def willReturnRequestedAuthorityForCode(requestedAuthority: RequestedAuthority) = {
-    mock.register(get(urlPathEqualTo("/authority")).withQueryParam("code", equalTo(requestedAuthority.code.get.code))
+    mock.register(get(urlPathEqualTo("/authority")).withQueryParam("code", equalTo(requestedAuthority.authorizationCode.get.code))
       .willReturn(
         aResponse()
           .withStatus(OK)

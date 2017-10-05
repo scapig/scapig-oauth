@@ -16,9 +16,11 @@ import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import play.api.libs.json.Json.toJson
 
 class ApplicationConnectorSpec extends UnitSpec with BeforeAndAfterAll with BeforeAndAfterEach {
-  val port = 7000
+  val port = 7001
 
-  val playApplication = new GuiceApplicationBuilder().build()
+  val playApplication = new GuiceApplicationBuilder()
+    .configure("services.application.port" -> "7001")
+    .build()
   val wireMockServer = new WireMockServer(wireMockConfig().port(port))
 
   val clientId = "aClientId"

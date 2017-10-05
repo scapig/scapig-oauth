@@ -13,7 +13,7 @@ import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.http.Status
 import play.api.libs.json.Json
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, Result}
 import play.api.test.{FakeRequest, Helpers}
 import services.GrantScopeService
 import utils.UnitSpec
@@ -26,7 +26,8 @@ class GrantScopeControllerSpec extends UnitSpec with MockitoSugar with BeforeAnd
 
   val authorizationCode = AuthorizationCode("aCode", DateTime.now())
   val userId = "userId"
-  val completedRequestedAuthority = RequestedAuthority(UUID.randomUUID(), "clientId", Seq("scope1"), "http://redirectUri", PRODUCTION, Some(authorizationCode), Some(userId))
+  val requestedAuthority = RequestedAuthority(UUID.randomUUID(), "clientId", Seq("scope1"), "http://redirectUri", PRODUCTION, Some(authorizationCode), Some(userId))
+  val completedRequestedAuthority = requestedAuthority.copy(authorizationCode = Some(authorizationCode), userId = Some(userId))
 
   val requestedAuthorityId = completedRequestedAuthority.id.toString
   val grantAuthority = GrantAuthority(requestedAuthorityId, Seq(Scope("scope1", "View profile", "View name, address and email")), application)
@@ -44,6 +45,7 @@ class GrantScopeControllerSpec extends UnitSpec with MockitoSugar with BeforeAnd
 
     val request = FakeRequest()
     when(appContext.loginUrl).thenReturn("http://loginpage")
+    when(appContext.oauthUrl).thenReturn("http://oauthpage")
   }
 
   "showGrantScope" should {
@@ -55,7 +57,7 @@ class GrantScopeControllerSpec extends UnitSpec with MockitoSugar with BeforeAnd
       val result = execute(underTest.showGrantScope(requestedAuthorityId, Some("aState")), authenticatedRequest)
 
       status(result) shouldBe Status.OK
-      bodyOf(result) should include ("The <strong>myApp</strong> software application is requesting to do the following")
+      bodyOf(result) should include("The <strong>myApp</strong> software application is requesting to do the following")
     }
 
     "redirect to the login page when the user is not logged in" in new Setup {
@@ -63,10 +65,10 @@ class GrantScopeControllerSpec extends UnitSpec with MockitoSugar with BeforeAnd
 
       given(grantScopeService.fetchGrantAuthority(requestedAuthorityId)).willReturn(successful(grantAuthority))
 
-      val result = execute(underTest.showGrantScope(requestedAuthorityId, Some("aState")),unauthenticatedRequest)
+      val result = execute(underTest.showGrantScope(requestedAuthorityId, Some("aState")), unauthenticatedRequest)
 
       status(result) shouldBe Status.SEE_OTHER
-      result.header.headers.get("Location") shouldBe Some(s"http://loginpage?continue=%2Fgrantscope%3FreqAuthId%3D$requestedAuthorityId%26state%3DaState")
+      result.header.headers.get("Location") shouldBe Some(s"http://loginpage?continue=http%3A%2F%2Foauthpage%2Fgrantscope%3FreqAuthId%3D$requestedAuthorityId%26state%3DaState")
     }
 
     "fail with time out when the requested authority does not exist or has expired" in new Setup {
@@ -77,7 +79,7 @@ class GrantScopeControllerSpec extends UnitSpec with MockitoSugar with BeforeAnd
       val result = execute(underTest.showGrantScope(requestedAuthorityId, Some("aState")), authenticatedRequest)
 
       status(result) shouldBe Status.UNPROCESSABLE_ENTITY
-      bodyOf(result) should include ("Session Expired")
+      bodyOf(result) should include("Session Expired")
     }
 
   }
@@ -102,7 +104,7 @@ class GrantScopeControllerSpec extends UnitSpec with MockitoSugar with BeforeAnd
       val result = await(underTest.acceptGrantScope()(loggedOutRequest))
 
       status(result) shouldBe Status.SEE_OTHER
-      result.header.headers.get("Location") shouldBe Some(s"http://loginpage?continue=%2Fgrantscope%3FreqAuthId%3D$requestedAuthorityId%26state%3DaState")
+      result.header.headers.get("Location") shouldBe Some(s"http://loginpage?continue=http%3A%2F%2Foauthpage%2Fgrantscope%3FreqAuthId%3D$requestedAuthorityId%26state%3DaState")
     }
 
     "fail with BAD_REQUEST when the reqAuthId is absent" in new Setup {
@@ -131,7 +133,43 @@ class GrantScopeControllerSpec extends UnitSpec with MockitoSugar with BeforeAnd
       val result = await(underTest.acceptGrantScope()(loggedInRequest))
 
       status(result) shouldBe Status.UNPROCESSABLE_ENTITY
-      bodyOf(result) should include ("Session Expired")
+      bodyOf(result) should include("Session Expired")
     }
   }
+
+  "cancel" should {
+    "redirect to the redirectUri with an ACCESS_DENIED code and log out" in new Setup {
+      val loggedInRequest = request
+        .withFormUrlEncodedBody("reqAuthId" -> requestedAuthorityId, "state" -> "aState")
+        .withSession("userId" -> userId)
+
+      given(grantScopeService.fetchRequestedAuthority(requestedAuthorityId)).willReturn(successful(requestedAuthority))
+
+      val result = await(underTest.cancel(requestedAuthorityId, Some("aState"))(loggedInRequest))
+
+      status(result) shouldBe Status.FOUND
+      result.header.headers.get("Location") shouldBe Some("http://redirectUri?error=ACCESS_DENIED&error_description=user+denied+the+authorization&state=aState")
+      verifyUserLoggedOut(result)
+    }
+
+    "fail with UNPROCESSABLE_ENTITY when the requested authority is invalid or has timed out" in new Setup {
+      val loggedInRequest = request
+        .withFormUrlEncodedBody("reqAuthId" -> requestedAuthorityId, "state" -> "aState")
+        .withSession("userId" -> userId)
+
+      given(grantScopeService.fetchRequestedAuthority(requestedAuthorityId)).willReturn(failed(RequestedAuthorityNotFound()))
+
+      val result = await(underTest.cancel(requestedAuthorityId, Some("aState"))(loggedInRequest))
+
+      status(result) shouldBe Status.UNPROCESSABLE_ENTITY
+      bodyOf(result) should include("Session Expired")
+    }
+
+  }
+
+  private def verifyUserLoggedOut(result: Result) = {
+    result.newCookies.head.name shouldBe "PLAY_SESSION"
+    result.newCookies.head.maxAge shouldBe Some(-86400)
+  }
+
 }

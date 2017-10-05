@@ -14,7 +14,7 @@ import scala.concurrent.Future
 @Singleton
 class ErrorHandler extends DefaultHttpErrorHandler {
   override def onBadRequest(request: RequestHeader, message: String): Future[Result] = {
-    Future.successful(ErrorInvalidRequest(message).toHttpResponse)
+    Future.successful(Results.BadRequest(Json.obj("error" -> "invalid_request", "error_description" -> message)))
   }
 
   override def onNotFound(request: RequestHeader, message: String): Future[Result] = {

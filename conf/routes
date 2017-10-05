@@ -8,3 +8,5 @@ GET     /authorize                  @controllers.AuthorizationController.authori
 GET     /grantscope                 @controllers.GrantScopeController.showGrantScope(reqAuthId, state: Option[String])
 
 POST    /grantscope                 @controllers.GrantScopeController.acceptGrantScope()
+
+POST    /cancel                     @controllers.GrantScopeController.cancel(reqAuthId, state: Option[String])

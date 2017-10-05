@@ -7,7 +7,7 @@ import play.api.libs.json.Json.toJson
 import tapi.MockHost
 import models.JsonFormatters._
 
-object MockApplication extends MockHost(7000) {
+object MockApplication extends MockHost(7001) {
 
   def willAuthenticateSucceed(clientId: String, clientSecret: String, result: EnvironmentApplication) = {
     mock.register(post(urlEqualTo(s"/application/authenticate"))

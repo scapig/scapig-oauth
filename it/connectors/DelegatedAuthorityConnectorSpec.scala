@@ -17,7 +17,9 @@ class DelegatedAuthorityConnectorSpec extends UnitSpec with BeforeAndAfterAll wi
   val port = 7001
   val wireMockServer = new WireMockServer(wireMockConfig().port(port))
 
-  val application = new GuiceApplicationBuilder().build()
+  val application = new GuiceApplicationBuilder()
+    .configure("services.delegated-authority.port" -> "7001")
+    .build()
 
   val request = DelegatedAuthorityRequest("clientId", "userId", Seq("scope1", "scope2"), Environment.PRODUCTION)
   val tokenResponse = TokenResponse("accessToken", "refreshToken", 14400, "scope1 scope2")

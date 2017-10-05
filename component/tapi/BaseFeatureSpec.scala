@@ -7,6 +7,8 @@ import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import org.scalatest._
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
+import play.api.Application
+import play.api.inject.guice.GuiceApplicationBuilder
 import tapi.stubs.{MockApplication, MockDelegatedAuthority, MockRequestedAuthority, MockScope}
 
 import scala.concurrent.duration.Duration
@@ -22,6 +24,15 @@ with GivenWhenThen with BeforeAndAfterEach with BeforeAndAfterAll with GuiceOneS
 
   override lazy val port = 14680
   val serviceUrl = s"http://localhost:$port"
+
+  override def fakeApplication(): Application = new GuiceApplicationBuilder()
+    .configure("services.application.port" -> "7001")
+    .configure("services.delegated-authority.port" -> "7002")
+    .configure("services.requested-authority.port" -> "7003")
+    .configure("services.scope.port" -> "7004")
+    .configure("loginUrl" -> "http://localhost:15000/login")
+    .configure("oauthUrl" -> "http://localhost:14680")
+    .build()
 
   val timeout = Duration(5, TimeUnit.SECONDS)
   val mocks = Seq[MockHost](MockApplication, MockDelegatedAuthority, MockRequestedAuthority, MockScope)

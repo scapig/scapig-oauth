@@ -13,9 +13,11 @@ import utils.UnitSpec
 import models.JsonFormatters._
 
 class ScopeConnectorSpec extends UnitSpec with BeforeAndAfterAll with BeforeAndAfterEach {
-  val port = 7003
+  val port = 7001
 
-  val playApplication = new GuiceApplicationBuilder().build()
+  val playApplication = new GuiceApplicationBuilder()
+    .configure("services.scope.port" -> "7001")
+    .build()
   val wireMockServer = new WireMockServer(wireMockConfig().port(port))
 
   override def beforeAll {

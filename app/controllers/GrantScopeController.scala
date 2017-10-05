@@ -5,7 +5,7 @@ import javax.inject.{Inject, Singleton}
 
 import config.AppContext
 import models.RequestedAuthorityNotFound
-import play.api.mvc.{AbstractController, ControllerComponents, Request, Result}
+import play.api.mvc._
 import services.GrantScopeService
 
 import scala.concurrent.Future.successful
@@ -51,6 +51,13 @@ class GrantScopeController @Inject()(cc: ControllerComponents, grantScopeService
       accept)
   }
 
+  def cancel(reqAuthId: String, state: Option[String]) = Action.async { implicit request =>
+    (for {
+      requestedAuthority <- grantScopeService.fetchRequestedAuthority(reqAuthId)
+      stateParam = state.map(s => s"&state=$s").getOrElse("")
+      cancelUri = s"${requestedAuthority.redirectUri}?error=ACCESS_DENIED&error_description=user+denied+the+authorization$stateParam"
+    } yield Found(cancelUri).discardingCookies(DiscardingCookie("PLAY_SESSION"))) recover recovery
+  }
 
   private def recovery(implicit request: Request[_]): PartialFunction[Throwable, Result] = {
     case _: RequestedAuthorityNotFound => UnprocessableEntity(views.html.errorTemplate(timedOutTitle, timedOutHeading, timedOutMessage))

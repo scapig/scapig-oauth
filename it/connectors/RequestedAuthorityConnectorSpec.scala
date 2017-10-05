@@ -15,9 +15,11 @@ import utils.UnitSpec
 import models.JsonFormatters._
 
 class RequestedAuthorityConnectorSpec extends UnitSpec with BeforeAndAfterAll with BeforeAndAfterEach {
-  val port = 7002
+  val port = 7001
   val wireMockServer = new WireMockServer(wireMockConfig().port(port))
-  val application = new GuiceApplicationBuilder().build()
+  val application = new GuiceApplicationBuilder()
+    .configure("services.requested-authority.port" -> "7001")
+    .build()
 
   val createRequest = CreateRequestedAuthorityRequest("clientId", Seq("scope1"), "/redirectUri", Environment.PRODUCTION)
 
@@ -26,7 +28,7 @@ class RequestedAuthorityConnectorSpec extends UnitSpec with BeforeAndAfterAll wi
 
   val completeRequest = CompleteRequestedAuthorityRequest(userId = "userId")
   val authorizationCode = "abcde"
-  val completedRequestedAuthority = requestedAuthority.copy(userId = Some(completeRequest.userId), code = Some(AuthorizationCode(authorizationCode)))
+  val completedRequestedAuthority = requestedAuthority.copy(userId = Some(completeRequest.userId), authorizationCode = Some(AuthorizationCode(authorizationCode)))
 
   trait Setup {
     val requestedAuthorityConnector = application.injector.instanceOf[RequestedAuthorityConnector]
