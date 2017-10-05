@@ -31,7 +31,7 @@ class GrantScopeController @Inject()(cc: ControllerComponents, grantScopeService
   def acceptGrantScope() = Action.async { implicit request =>
     def completeRequestedAuthority(requestedAuthorityId: String, userId: String, state: Option[String]) = {
       grantScopeService.completeRequestedAuthority(requestedAuthorityId, userId) map { requestedAuthority =>
-        val params = Map("code" -> requestedAuthority.code.map(_.code).toSeq) ++ addState(state)
+        val params = Map("code" -> requestedAuthority.authorizationCode.map(_.code).toSeq) ++ addState(state)
         Redirect(requestedAuthority.redirectUri, params)
       } recover recovery
     }

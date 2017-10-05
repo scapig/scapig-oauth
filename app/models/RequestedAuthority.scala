@@ -17,7 +17,7 @@ case class RequestedAuthority(id: UUID,
                               scopes: Seq[String],
                               redirectUri: String,
                               environment: Environment.Environment,
-                              code: Option[AuthorizationCode] = None,
+                              authorizationCode: Option[AuthorizationCode] = None,
                               userId: Option[String] = None)
 
 case class AuthorizationCode(code: String,
