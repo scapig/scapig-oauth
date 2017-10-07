@@ -13,6 +13,13 @@ object DelegatedAuthorityRequest {
     requestedAuthority.scopes, requestedAuthority.environment)
 }
 
+case class DelegatedAuthorityRefreshRequest(clientId: String,
+                                            refreshToken: String)
+
+object DelegatedAuthorityRefreshRequest {
+  def apply(refreshRequest: RefreshRequest): DelegatedAuthorityRefreshRequest = DelegatedAuthorityRefreshRequest(refreshRequest.clientId, refreshRequest.refreshToken)
+}
+
 object Environment extends Enumeration {
   type Environment = Value
   val PRODUCTION, SANDBOX = Value

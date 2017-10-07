@@ -1,7 +1,7 @@
 package tapi.stubs
 
 import com.github.tomakehurst.wiremock.client.WireMock._
-import models.{DelegatedAuthorityRequest, TokenResponse}
+import models.{DelegatedAuthorityRefreshRequest, DelegatedAuthorityRequest, TokenResponse}
 import play.api.http.Status.OK
 import play.api.libs.json.Json.toJson
 import tapi.MockHost
@@ -19,4 +19,16 @@ object MockDelegatedAuthority extends MockHost(7002) {
       )
     )
   }
+
+  def willRefreshToken(delegatedAuthorityRefreshRequest: DelegatedAuthorityRefreshRequest, tokenResponse: TokenResponse) = {
+    mock.register(post(urlEqualTo(s"/token/refresh"))
+      .withRequestBody(equalToJson(toJson(delegatedAuthorityRefreshRequest).toString()))
+      .willReturn(
+        aResponse()
+          .withStatus(OK)
+          .withBody(toJson(tokenResponse).toString())
+      )
+    )
+  }
+
 }

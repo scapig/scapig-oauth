@@ -14,6 +14,7 @@ import scala.concurrent.Future.{failed, successful}
 class TokenServiceSpec extends UnitSpec with MockitoSugar {
 
   val tokenRequest = TokenRequest("clientId", "clientSecret", "/redirect", "aCode")
+  val tokenResponse = TokenResponse("access_token", "refresh_token", 14400, "scope1")
 
   val environmentApplication = EnvironmentApplication(UUID.randomUUID(), "appName", Environment.PRODUCTION,
     "appDescription", ApplicationUrls(Seq("/redirectUri")))
@@ -21,7 +22,8 @@ class TokenServiceSpec extends UnitSpec with MockitoSugar {
   val requestedAuthority = RequestedAuthority(UUID.randomUUID(), tokenRequest.clientId, Seq("scope1"), tokenRequest.redirectUri,
     environmentApplication.environment, Some(AuthorizationCode(tokenRequest.code)), Some("userId"))
 
-  val tokenResponse = TokenResponse("access_token", "refresh_token", 14400, "scope1")
+  val refreshRequest = RefreshRequest("clientId", "clientSecret", "refreshToken")
+  val refreshTokenResponse =  TokenResponse("new_access_token", "new_refresh_token", 14400, "scope1")
 
   trait Setup {
     val requestedAuthorityConnector: RequestedAuthorityConnector = mock[RequestedAuthorityConnector]
@@ -36,6 +38,8 @@ class TokenServiceSpec extends UnitSpec with MockitoSugar {
     given(requestedAuthorityConnector.fetchByCode(tokenRequest.code)).willReturn(successful(requestedAuthority))
     given(delegatedAuthorityConnector.createToken(DelegatedAuthorityRequest(requestedAuthority))).willReturn(successful(tokenResponse))
     given(requestedAuthorityConnector.delete(requestedAuthority.id.toString)).willReturn(successful())
+    given(delegatedAuthorityConnector.refreshToken(DelegatedAuthorityRefreshRequest(refreshRequest))).willReturn(successful(refreshTokenResponse))
+
   }
 
   "createToken" should {
@@ -99,5 +103,35 @@ class TokenServiceSpec extends UnitSpec with MockitoSugar {
       intercept[RuntimeException]{await(underTest.createToken(tokenRequest))}
     }
 
+  }
+
+  "refreshToken" should {
+
+    "return the refreshedToken" in new Setup {
+      val result = await(underTest.refreshToken(refreshRequest))
+
+      result shouldBe refreshTokenResponse
+    }
+
+    "fail with OauthUnauthorizedException when clientId or clientSecret is invalid" in new Setup {
+      given(applicationConnector.authenticate(refreshRequest.clientId, refreshRequest.clientSecret))
+        .willReturn(failed(new ApplicationNotFound))
+
+      val exception = intercept[OauthUnauthorizedException] {
+        await(underTest.refreshToken(refreshRequest))
+      }
+
+      exception.oauthError shouldBe OAuthError.invalidClientOrSecret
+    }
+
+    "propagate OauthValidationException" in new Setup {
+      val delegatedAuthorityRefreshRequest = DelegatedAuthorityRefreshRequest(refreshRequest)
+
+      given(delegatedAuthorityConnector.refreshToken(delegatedAuthorityRefreshRequest)).willReturn(failed(new OauthValidationException(OAuthError.unauthorizedClient)))
+
+      val exception = intercept[OauthValidationException] {
+        await(underTest.refreshToken(refreshRequest))
+      }
+    }
   }
 }

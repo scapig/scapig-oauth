@@ -21,6 +21,10 @@ class TokenSpec extends BaseFeatureSpec {
   val delegatedAuthorityRequest = DelegatedAuthorityRequest(requestedAuthority)
   val tokenResponse = TokenResponse("accessToken", "refreshToken", 14400, "scope1")
 
+  val refreshToken = "refreshToken"
+  val refreshTokenResponse = TokenResponse("newAccessToken", "newRefreshToken", 14400, "scope1")
+  val delegatedAuthorityRefreshRequest = DelegatedAuthorityRefreshRequest(clientId, refreshToken)
+
   feature("create token") {
     val requestBody = s"" +
       s"client_id=$clientId" +
@@ -49,6 +53,29 @@ class TokenSpec extends BaseFeatureSpec {
       Then("I receive a 200 (Ok) with the token")
       createdResponse.code shouldBe Status.OK
       Json.parse(createdResponse.body).as[TokenResponse] shouldBe tokenResponse
+    }
+  }
+
+  feature("refresh token") {
+    val requestBody = s"" +
+      s"client_id=$clientId" +
+      s"&client_secret=$clientSecret" +
+      s"&grant_type=refresh_token" +
+      s"&refresh_token=$refreshToken"
+
+    scenario("happy path") {
+      Given("an application")
+      MockApplication.willAuthenticateSucceed(clientId, clientSecret, application)
+
+      And("refresh of delegated authority succeed")
+      MockDelegatedAuthority.willRefreshToken(delegatedAuthorityRefreshRequest, refreshTokenResponse)
+
+      When("A token refresh request is received")
+      val createdResponse = Http(s"$serviceUrl/token").postData(requestBody).asString
+
+      Then("I receive a 200 (Ok) with the token")
+      createdResponse.code shouldBe Status.OK
+      Json.parse(createdResponse.body).as[TokenResponse] shouldBe refreshTokenResponse
     }
   }
 }

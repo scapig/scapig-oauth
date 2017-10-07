@@ -29,4 +29,15 @@ class TokenService @Inject()(requestedAuthorityConnector: RequestedAuthorityConn
       case _: RequestedAuthorityNotFound => throw OauthValidationException(OAuthError.invalidCode)
     }
   }
+
+  def refreshToken(refreshRequest: RefreshRequest): Future[TokenResponse] = {
+    val future = for {
+      _ <- applicationConnector.authenticate(refreshRequest.clientId, refreshRequest.clientSecret)
+      token <- delegatedAuthorityConnector.refreshToken(DelegatedAuthorityRefreshRequest(refreshRequest))
+    } yield token
+
+    future recover {
+      case _: ApplicationNotFound => throw OauthUnauthorizedException(OAuthError.invalidClientOrSecret)
+    }
+  }
 }
