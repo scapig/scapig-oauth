@@ -11,4 +11,5 @@ sh stop.sh tapi-api-developer
 sh stop.sh tapi-api-developer-hub
 sh stop.sh tapi-documentation
 sh stop.sh tapi-gateway
+sh stop.sh tapi-publisher
 sh stop.sh tapi-hello

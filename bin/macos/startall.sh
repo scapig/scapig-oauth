@@ -11,4 +11,5 @@ sh start.sh tapi-developer 8000
 sh start.sh tapi-developer-hub 8010
 sh start.sh tapi-documentation 8020
 sh start.sh tapi-gateway 8030
+sh start.sh tapi-publisher 8040
 sh start.sh tapi-hello 8080
