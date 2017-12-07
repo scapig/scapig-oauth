@@ -9,7 +9,8 @@ docker start tapi-oauth-login.docker
 docker start tapi-requested-authority.docker
 docker start tapi-developer.docker
 docker start tapi-developer-hub.docker
-docker start tapi-documentation.docker
 docker start tapi-gateway.docker
 docker start tapi-publisher.docker
 docker start tapi-hello.docker
+docker start tapi-nginx-documentation.docker
+docker start tapi-nginx-gateway.docker

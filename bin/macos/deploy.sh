@@ -1,6 +1,10 @@
 #!/bin/bash
 
 docker network create tapi-network
+docker run --network=tapi-network --name tapi-nginx-documentation.docker  \
+ -d -p 80:80 -i tapi-nginx-documentation
+docker run --network=tapi-network --name tapi-nginx-gateway.docker  \
+ -d -p 8080:8080 -i tapi-nginx-gateway
 docker run --network=tapi-network --name mongo  \
  -d mongo
 docker run --network=tapi-network --name tapi-api-definition.docker \
@@ -21,11 +25,9 @@ docker run --network=tapi-network --name tapi-developer.docker \
  -d -p8000:8000 -i tapi-developer sh start-docker.sh
 docker run --network=tapi-network --name tapi-developer-hub.docker \
  -d -p8010:8010 -i tapi-developer-hub sh start-docker.sh
-docker run --network=tapi-network --name tapi-documentation.docker \
- -d -p8020:8020 -i tapi-documentation sh start-docker.sh
 docker run --network=tapi-network --name tapi-gateway.docker \
  -d -p8030:8030 -i tapi-gateway sh start-docker.sh
 docker run --network=tapi-network --name tapi-publisher.docker \
  -d -p8040:8040 -i tapi-publisher sh start-docker.sh
 docker run --network=tapi-network --name tapi-hello.docker \
- -d -p8080:8080 -i tapi-hello sh start-docker.sh
+ -d -p9000:9000 -i tapi-hello sh start-docker.sh

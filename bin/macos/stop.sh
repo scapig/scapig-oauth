@@ -9,7 +9,8 @@ docker stop tapi-oauth-login.docker
 docker stop tapi-requested-authority.docker
 docker stop tapi-developer.docker
 docker stop tapi-developer-hub.docker
-docker stop tapi-documentation.docker
 docker stop tapi-gateway.docker
 docker stop tapi-publisher.docker
 docker stop tapi-hello.docker
+docker stop tapi-nginx-documentation.docker
+docker stop tapi-nginx-gateway.docker

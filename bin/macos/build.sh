@@ -9,7 +9,8 @@ sh build-instance.sh tapi-oauth-login
 sh build-instance.sh tapi-requested-authority
 sh build-instance.sh tapi-developer
 sh build-instance.sh tapi-developer-hub
-sh build-instance.sh tapi-documentation
 sh build-instance.sh tapi-gateway
 sh build-instance.sh tapi-publisher
 sh build-instance.sh tapi-hello
+docker build -t tapi-nginx-documentation nginx-documentation
+docker build -t tapi-nginx-gateway nginx-gateway
