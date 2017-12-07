@@ -68,7 +68,7 @@ class GrantScopeControllerSpec extends UnitSpec with MockitoSugar with BeforeAnd
       val result = execute(underTest.showGrantScope(requestedAuthorityId, Some("aState")), unauthenticatedRequest)
 
       status(result) shouldBe Status.SEE_OTHER
-      result.header.headers.get("Location") shouldBe Some(s"http://loginpage?continue=http%3A%2F%2Foauthpage%2Fgrantscope%3FreqAuthId%3D$requestedAuthorityId%26state%3DaState")
+      result.header.headers.get("Location") shouldBe Some(s"http://loginpage?continue=http%3A%2F%2Foauthpage%2Foauth%2Fgrantscope%3FreqAuthId%3D$requestedAuthorityId%26state%3DaState")
     }
 
     "fail with time out when the requested authority does not exist or has expired" in new Setup {
@@ -104,7 +104,7 @@ class GrantScopeControllerSpec extends UnitSpec with MockitoSugar with BeforeAnd
       val result = await(underTest.acceptGrantScope()(loggedOutRequest))
 
       status(result) shouldBe Status.SEE_OTHER
-      result.header.headers.get("Location") shouldBe Some(s"http://loginpage?continue=http%3A%2F%2Foauthpage%2Fgrantscope%3FreqAuthId%3D$requestedAuthorityId%26state%3DaState")
+      result.header.headers.get("Location") shouldBe Some(s"http://loginpage?continue=http%3A%2F%2Foauthpage%2Foauth%2Fgrantscope%3FreqAuthId%3D$requestedAuthorityId%26state%3DaState")
     }
 
     "fail with BAD_REQUEST when the reqAuthId is absent" in new Setup {

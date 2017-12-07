@@ -34,7 +34,7 @@ class AuthorizationControllerSpec extends UnitSpec with MockitoSugar with Before
       val result = await(underTest.authorize(authorizationRequest)(request))
 
       status(result) shouldBe Status.SEE_OTHER
-      result.header.headers.get("Location") shouldBe Some(s"/grantscope?reqAuthId=${requestedAuthority.id}&state=aState")
+      result.header.headers.get("Location") shouldBe Some(s"/oauth/grantscope?reqAuthId=${requestedAuthority.id}&state=aState")
     }
 
     "fail with a 400 when authorizationService fails with OauthValidationException" in new Setup {
