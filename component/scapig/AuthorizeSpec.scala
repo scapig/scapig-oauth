@@ -1,4 +1,4 @@
-package tapi
+package scapig
 
 import java.util.UUID
 
@@ -7,7 +7,7 @@ import models.JsonFormatters._
 import models._
 import play.api.http.Status
 import play.api.libs.json.Json
-import tapi.stubs.{MockApplication, MockDelegatedAuthority, MockRequestedAuthority, MockScope}
+import scapig.stubs.{MockApplication, MockDelegatedAuthority, MockRequestedAuthority, MockScope}
 
 import scalaj.http.Http
 

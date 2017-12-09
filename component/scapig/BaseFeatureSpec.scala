@@ -1,4 +1,4 @@
-package tapi
+package scapig
 
 import java.util.concurrent.TimeUnit
 
@@ -9,7 +9,7 @@ import org.scalatest._
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
-import tapi.stubs.{MockApplication, MockDelegatedAuthority, MockRequestedAuthority, MockScope}
+import scapig.stubs.{MockApplication, MockDelegatedAuthority, MockRequestedAuthority, MockScope}
 
 import scala.concurrent.duration.Duration
 

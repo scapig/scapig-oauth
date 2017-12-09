@@ -1,10 +1,10 @@
-package tapi.stubs
+package scapig.stubs
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import models.{AuthenticateRequest, EnvironmentApplication}
 import play.api.http.Status.OK
 import play.api.libs.json.Json.toJson
-import tapi.MockHost
+import scapig.MockHost
 import models.JsonFormatters._
 
 object MockApplication extends MockHost(7001) {

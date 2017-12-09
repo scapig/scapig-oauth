@@ -1,9 +1,9 @@
-package tapi.stubs
+package scapig.stubs
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import models.{CompleteRequestedAuthorityRequest, CreateRequestedAuthorityRequest, RequestedAuthority}
 import play.api.libs.json.Json.toJson
-import tapi.MockHost
+import scapig.MockHost
 import models.JsonFormatters._
 import play.api.http.Status._
 import play.api.libs.json.Json

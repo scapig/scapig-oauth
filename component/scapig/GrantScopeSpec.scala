@@ -1,4 +1,4 @@
-package tapi
+package scapig
 
 import java.util.UUID
 
@@ -6,7 +6,7 @@ import models.Environment.PRODUCTION
 import models._
 import play.api.http.Status
 import play.api.mvc.Session
-import tapi.stubs.{MockApplication, MockRequestedAuthority, MockScope}
+import scapig.stubs.{MockApplication, MockRequestedAuthority, MockScope}
 
 import scalaj.http.Http
 
