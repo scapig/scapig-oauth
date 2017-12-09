@@ -1,33 +1,33 @@
 #!/bin/bash
 
-docker network create tapi-network
-docker run --network=tapi-network --name tapi-nginx-documentation.docker  \
- -d -p 80:80 -i tapi-nginx-documentation
-docker run --network=tapi-network --name tapi-nginx-gateway.docker  \
- -d -p 8080:8080 -i tapi-nginx-gateway
-docker run --network=tapi-network --name mongo  \
+docker network create scapig-network
+docker run --network=scapig-network --name scapig-nginx-documentation.docker  \
+ -d -p 80:80 -i scapig-nginx-documentation
+docker run --network=scapig-network --name scapig-nginx-gateway.docker  \
+ -d -p 8080:8080 -i scapig-nginx-gateway
+docker run --network=scapig-network --name mongo  \
  -d mongo
-docker run --network=tapi-network --name tapi-api-definition.docker \
- -d -p7000:7000 -i tapi-api-definition sh start-docker.sh
-docker run --network=tapi-network --name tapi-api-scope.docker \
- -d -p7010:7010 -i tapi-api-scope sh start-docker.sh
-docker run --network=tapi-network --name tapi-application.docker \
- -d -p7020:7020 -i tapi-application sh start-docker.sh
-docker run --network=tapi-network --name tapi-delegated-authority.docker \
- -d -p7030:7030 -i tapi-delegated-authority sh start-docker.sh
-docker run --network=tapi-network --name tapi-oauth.docker \
- -d -p7040:7040 -i tapi-oauth sh start-docker.sh
-docker run --network=tapi-network --name tapi-oauth-login.docker \
- -d -p7050:7050 -i tapi-oauth-login sh start-docker.sh
-docker run --network=tapi-network --name tapi-requested-authority.docker \
- -d -p7060:7060 -i tapi-requested-authority sh start-docker.sh
-docker run --network=tapi-network --name tapi-developer.docker \
- -d -p8000:8000 -i tapi-developer sh start-docker.sh
-docker run --network=tapi-network --name tapi-developer-hub.docker \
- -d -p8010:8010 -i tapi-developer-hub sh start-docker.sh
-docker run --network=tapi-network --name tapi-gateway.docker \
- -d -p8030:8030 -i tapi-gateway sh start-docker.sh
-docker run --network=tapi-network --name tapi-publisher.docker \
- -d -p8040:8040 -i tapi-publisher sh start-docker.sh
-docker run --network=tapi-network --name tapi-hello.docker \
- -d -p9000:9000 -i tapi-hello sh start-docker.sh
+docker run --network=scapig-network --name scapig-api-definition.docker \
+ -d -p7000:7000 -i scapig-api-definition sh start-docker.sh
+docker run --network=scapig-network --name scapig-scope.docker \
+ -d -p7010:7010 -i scapig-scope sh start-docker.sh
+docker run --network=scapig-network --name scapig-application.docker \
+ -d -p7020:7020 -i scapig-application sh start-docker.sh
+docker run --network=scapig-network --name scapig-delegated-authority.docker \
+ -d -p7030:7030 -i scapig-delegated-authority sh start-docker.sh
+docker run --network=scapig-network --name scapig-oauth.docker \
+ -d -p7040:7040 -i scapig-oauth sh start-docker.sh
+docker run --network=scapig-network --name scapig-oauth-login.docker \
+ -d -p7050:7050 -i scapig-oauth-login sh start-docker.sh
+docker run --network=scapig-network --name scapig-requested-authority.docker \
+ -d -p7060:7060 -i scapig-requested-authority sh start-docker.sh
+docker run --network=scapig-network --name scapig-developer.docker \
+ -d -p8000:8000 -i scapig-developer sh start-docker.sh
+docker run --network=scapig-network --name scapig-developer-hub.docker \
+ -d -p8010:8010 -i scapig-developer-hub sh start-docker.sh
+docker run --network=scapig-network --name scapig-gateway.docker \
+ -d -p8030:8030 -i scapig-gateway sh start-docker.sh
+docker run --network=scapig-network --name scapig-publisher.docker \
+ -d -p8040:8040 -i scapig-publisher sh start-docker.sh
+docker run --network=scapig-network --name scapig-hello-world-api.docker \
+ -d -p9000:9000 -i scapig-hello-world-api sh start-docker.sh

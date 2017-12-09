@@ -1,16 +1,16 @@
 #!/bin/bash
 
-sh build-instance.sh tapi-api-definition
-sh build-instance.sh tapi-api-scope
-sh build-instance.sh tapi-application
-sh build-instance.sh tapi-delegated-authority
-sh build-instance.sh tapi-oauth
-sh build-instance.sh tapi-oauth-login
-sh build-instance.sh tapi-requested-authority
-sh build-instance.sh tapi-developer
-sh build-instance.sh tapi-developer-hub
-sh build-instance.sh tapi-gateway
-sh build-instance.sh tapi-publisher
-sh build-instance.sh tapi-hello
-docker build -t tapi-nginx-documentation nginx-documentation
-docker build -t tapi-nginx-gateway nginx-gateway
+sh build-instance.sh scapig-api-definition
+sh build-instance.sh scapig-scope
+sh build-instance.sh scapig-application
+sh build-instance.sh scapig-delegated-authority
+sh build-instance.sh scapig-oauth
+sh build-instance.sh scapig-oauth-login
+sh build-instance.sh scapig-requested-authority
+sh build-instance.sh scapig-developer
+sh build-instance.sh scapig-developer-hub
+sh build-instance.sh scapig-gateway
+sh build-instance.sh scapig-publisher
+sh build-instance.sh scapig-hello-world-api
+docker build -t scapig-nginx-documentation nginx-documentation
+docker build -t scapig-nginx-gateway nginx-gateway

@@ -4,31 +4,29 @@ REM environment variable TAPI_REPOSITORY must be set
 
 (
   setlocal EnableDelayedExpansion
-  echo starting tapi-api-definition
-  (start.bat tapi-api-definition 7000)
-  echo starting tapi-api-scope
-  (start.bat tapi-api-scope 7010)
-  echo starting tapi-application
-  (start.bat tapi-application 7020)
-  echo starting tapi-delegated-authority
-  (start.bat tapi-delegated-authority 7030)
-  echo starting tapi-oauth
-  (start.bat tapi-oauth 7040)
-  echo starting tapi-oauth-login
-  (start.bat tapi-oauth-login 7050)
-  echo starting tapi-requested-authority
-  (start.bat tapi-requested-authority 7060)
-  echo starting tapi-developer
-  (start.bat tapi-developer 8000)
-  echo starting tapi-developer-hub
-  (start.bat tapi-developer-hub 8010)
-  echo starting tapi-documentation
-  (start.bat tapi-documentation 8020)
-  echo starting tapi-gateway
-  (start.bat tapi-gateway 8030)
-  echo starting tapi-publisher
-  (start.bat tapi-publisher 8040)
-  echo starting tapi-hello
-  (start.bat tapi-hello 8080)
+  echo starting scapig-api-definition
+  (start.bat scapig-api-definition 7000)
+  echo starting scapig-scope
+  (start.bat scapig-scope 7010)
+  echo starting scapig-application
+  (start.bat scapig-application 7020)
+  echo starting scapig-delegated-authority
+  (start.bat scapig-delegated-authority 7030)
+  echo starting scapig-oauth
+  (start.bat scapig-oauth 7040)
+  echo starting scapig-oauth-login
+  (start.bat scapig-oauth-login 7050)
+  echo starting scapig-requested-authority
+  (start.bat scapig-requested-authority 7060)
+  echo starting scapig-developer
+  (start.bat scapig-developer 8000)
+  echo starting scapig-developer-hub
+  (start.bat scapig-developer-hub 8010)
+  echo starting scapig-gateway
+  (start.bat scapig-gateway 8030)
+  echo starting scapig-publisher
+  (start.bat scapig-publisher 8040)
+  echo starting scapig-hello-world-api
+  (start.bat scapig-hello-world-api 8080)
   endlocal
 )

@@ -1,16 +1,16 @@
 #!/bin/bash
 
-docker start tapi-api-definition.docker
-docker start tapi-api-scope.docker
-docker start tapi-application.docker
-docker start tapi-delegated-authority.docker
-docker start tapi-oauth.docker
-docker start tapi-oauth-login.docker
-docker start tapi-requested-authority.docker
-docker start tapi-developer.docker
-docker start tapi-developer-hub.docker
-docker start tapi-gateway.docker
-docker start tapi-publisher.docker
-docker start tapi-hello.docker
-docker start tapi-nginx-documentation.docker
-docker start tapi-nginx-gateway.docker
+docker start scapig-api-definition.docker
+docker start scapig-scope.docker
+docker start scapig-application.docker
+docker start scapig-delegated-authority.docker
+docker start scapig-oauth.docker
+docker start scapig-oauth-login.docker
+docker start scapig-requested-authority.docker
+docker start scapig-developer.docker
+docker start scapig-developer-hub.docker
+docker start scapig-gateway.docker
+docker start scapig-publisher.docker
+docker start scapig-hello-world-api.docker
+docker start scapig-nginx-documentation.docker
+docker start scapig-nginx-gateway.docker

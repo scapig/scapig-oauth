@@ -3,7 +3,7 @@ import _root_.play.sbt.PlayImport._
 import sbt.Keys._
 import sbt._
 
-name := "tapi-oauth"
+name := "scapig-oauth"
 
 version := "1.0"
 

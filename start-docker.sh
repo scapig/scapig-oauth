@@ -1,4 +1,4 @@
 #!/bin/sh
-SCRIPT=$(find . -type f -name tapi-oauth)
-rm -f tapi-oauth*/RUNNING_PID
+SCRIPT=$(find . -type f -name scapig-oauth)
+rm -f scapig-oauth*/RUNNING_PID
 exec $SCRIPT -Dhttp.port=7040

@@ -1,17 +1,17 @@
 #!/bin/bash
 
-docker rm tapi-nginx-documentation.docker
-docker rm tapi-nginx-gateway.docker
-docker rm tapi-api-definition.docker
-docker rm tapi-api-scope.docker
-docker rm tapi-application.docker
-docker rm tapi-delegated-authority.docker
-docker rm tapi-oauth.docker
-docker rm tapi-oauth-login.docker
-docker rm tapi-requested-authority.docker
-docker rm tapi-developer.docker
-docker rm tapi-developer-hub.docker
-docker rm tapi-gateway.docker
-docker rm tapi-publisher.docker
-docker rm tapi-hello.docker
-docker network rm tapi-network
+docker rm scapig-nginx-documentation.docker
+docker rm scapig-nginx-gateway.docker
+docker rm scapig-api-definition.docker
+docker rm scapig-scope.docker
+docker rm scapig-application.docker
+docker rm scapig-delegated-authority.docker
+docker rm scapig-oauth.docker
+docker rm scapig-oauth-login.docker
+docker rm scapig-requested-authority.docker
+docker rm scapig-developer.docker
+docker rm scapig-developer-hub.docker
+docker rm scapig-gateway.docker
+docker rm scapig-publisher.docker
+docker rm scapig-hello-world-api.docker
+docker network rm scapig-network

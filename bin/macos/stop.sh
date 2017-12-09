@@ -1,16 +1,16 @@
 #!/bin/bash
 
-docker stop tapi-api-definition.docker
-docker stop tapi-api-scope.docker
-docker stop tapi-application.docker
-docker stop tapi-delegated-authority.docker
-docker stop tapi-oauth.docker
-docker stop tapi-oauth-login.docker
-docker stop tapi-requested-authority.docker
-docker stop tapi-developer.docker
-docker stop tapi-developer-hub.docker
-docker stop tapi-gateway.docker
-docker stop tapi-publisher.docker
-docker stop tapi-hello.docker
-docker stop tapi-nginx-documentation.docker
-docker stop tapi-nginx-gateway.docker
+docker stop scapig-api-definition.docker
+docker stop scapig-scope.docker
+docker stop scapig-application.docker
+docker stop scapig-delegated-authority.docker
+docker stop scapig-oauth.docker
+docker stop scapig-oauth-login.docker
+docker stop scapig-requested-authority.docker
+docker stop scapig-developer.docker
+docker stop scapig-developer-hub.docker
+docker stop scapig-gateway.docker
+docker stop scapig-publisher.docker
+docker stop scapig-hello-world-api.docker
+docker stop scapig-nginx-documentation.docker
+docker stop scapig-nginx-gateway.docker
