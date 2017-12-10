@@ -18,6 +18,7 @@ class RequestedAuthorityConnectorSpec extends UnitSpec with BeforeAndAfterAll wi
   val port = 7001
   val wireMockServer = new WireMockServer(wireMockConfig().port(port))
   val application = new GuiceApplicationBuilder()
+    .configure("services.requested-authority.host" -> "localhost")
     .configure("services.requested-authority.port" -> "7001")
     .build()
 

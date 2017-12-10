@@ -19,6 +19,7 @@ class DelegatedAuthorityConnectorSpec extends UnitSpec with BeforeAndAfterAll wi
   val wireMockServer = new WireMockServer(wireMockConfig().port(port))
 
   val application = new GuiceApplicationBuilder()
+    .configure("services.delegated-authority.host" -> "localhost")
     .configure("services.delegated-authority.port" -> "7001")
     .build()
 

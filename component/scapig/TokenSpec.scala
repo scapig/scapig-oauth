@@ -48,7 +48,7 @@ class TokenSpec extends BaseFeatureSpec {
       MockRequestedAuthority.willDeleteRequestedAuthority(requestedAuthority)
 
       When("A token request is received")
-      val createdResponse = Http(s"$serviceUrl/token").postData(requestBody).asString
+      val createdResponse = Http(s"$serviceUrl/oauth/token").postData(requestBody).asString
 
       Then("I receive a 200 (Ok) with the token")
       createdResponse.code shouldBe Status.OK
@@ -71,7 +71,7 @@ class TokenSpec extends BaseFeatureSpec {
       MockDelegatedAuthority.willRefreshToken(delegatedAuthorityRefreshRequest, refreshTokenResponse)
 
       When("A token refresh request is received")
-      val createdResponse = Http(s"$serviceUrl/token").postData(requestBody).asString
+      val createdResponse = Http(s"$serviceUrl/oauth/token").postData(requestBody).asString
 
       Then("I receive a 200 (Ok) with the token")
       createdResponse.code shouldBe Status.OK

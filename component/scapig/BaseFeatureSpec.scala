@@ -26,9 +26,13 @@ with GivenWhenThen with BeforeAndAfterEach with BeforeAndAfterAll with GuiceOneS
   val serviceUrl = s"http://localhost:$port"
 
   override def fakeApplication(): Application = new GuiceApplicationBuilder()
+    .configure("services.application.host" -> "localhost")
     .configure("services.application.port" -> "7001")
+    .configure("services.delegated-authority.host" -> "localhost")
     .configure("services.delegated-authority.port" -> "7002")
+    .configure("services.requested-authority.host" -> "localhost")
     .configure("services.requested-authority.port" -> "7003")
+    .configure("services.scope.host" -> "localhost")
     .configure("services.scope.port" -> "7004")
     .configure("loginUrl" -> "http://localhost:15000/login")
     .configure("oauthUrl" -> "http://localhost:14680")

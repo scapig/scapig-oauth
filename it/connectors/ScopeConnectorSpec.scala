@@ -16,6 +16,7 @@ class ScopeConnectorSpec extends UnitSpec with BeforeAndAfterAll with BeforeAndA
   val port = 7001
 
   val playApplication = new GuiceApplicationBuilder()
+    .configure("services.scope.host" -> "localhost")
     .configure("services.scope.port" -> "7001")
     .build()
   val wireMockServer = new WireMockServer(wireMockConfig().port(port))

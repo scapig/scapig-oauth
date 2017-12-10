@@ -40,7 +40,7 @@ class GrantScopeSpec extends BaseFeatureSpec {
       val cookie = Session.encodeAsCookie(Session(Map("userId" -> userId)))
 
       When("I request the grant scope")
-      val response = Http(s"$serviceUrl/grantscope?reqAuthId=${requestedAuthority.id}&state=$state")
+      val response = Http(s"$serviceUrl/oauth/grantscope?reqAuthId=${requestedAuthority.id}&state=$state")
         .cookie("PLAY_SESSION", cookie.value)
         .asString
 
@@ -63,11 +63,11 @@ class GrantScopeSpec extends BaseFeatureSpec {
       And("I am logged out")
 
       When("I request the grant scope")
-      val response = Http(s"$serviceUrl/grantscope?reqAuthId=${requestedAuthority.id}&state=$state").asString
+      val response = Http(s"$serviceUrl/oauth/grantscope?reqAuthId=${requestedAuthority.id}&state=$state").asString
 
       Then("I am redirected to the login page")
       response.code shouldBe Status.SEE_OTHER
-      response.header("Location") shouldBe Some(s"http://localhost:15000/login?continue=http%3A%2F%2Flocalhost%3A14680%2Fgrantscope%3FreqAuthId%3D${requestedAuthority.id}%26state%3D$state")
+      response.header("Location") shouldBe Some(s"http://localhost:15000/login?continue=http%3A%2F%2Flocalhost%3A14680%2Foauth%2Fgrantscope%3FreqAuthId%3D${requestedAuthority.id}%26state%3D$state")
     }
 
   }
@@ -85,7 +85,7 @@ class GrantScopeSpec extends BaseFeatureSpec {
       val cookie = Session.encodeAsCookie(Session(Map("userId" -> userId)))
 
       When("I accept to grant authority")
-      val response = Http(s"$serviceUrl/grantscope")
+      val response = Http(s"$serviceUrl/oauth/grantscope")
         .postForm(Seq(("reqAuthId", requestedAuthority.id.toString), ("state", state)))
         .cookie("PLAY_SESSION", cookie.value)
         .header("Csrf-Token", "nocheck")
@@ -107,14 +107,14 @@ class GrantScopeSpec extends BaseFeatureSpec {
       And("I am logged out")
 
       When("I accept to grant authority")
-      val response = Http(s"$serviceUrl/grantscope")
+      val response = Http(s"$serviceUrl/oauth/grantscope")
         .postForm(Seq(("reqAuthId", requestedAuthority.id.toString), ("state", state)))
         .header("Csrf-Token", "nocheck")
         .asString
 
       Then("I am redirected to the login page")
       response.code shouldBe Status.SEE_OTHER
-      response.header("Location") shouldBe Some(s"http://localhost:15000/login?continue=http%3A%2F%2Flocalhost%3A14680%2Fgrantscope%3FreqAuthId%3D${requestedAuthority.id}%26state%3D$state")
+      response.header("Location") shouldBe Some(s"http://localhost:15000/login?continue=http%3A%2F%2Flocalhost%3A14680%2Foauth%2Fgrantscope%3FreqAuthId%3D${requestedAuthority.id}%26state%3D$state")
 
     }
 
@@ -129,7 +129,7 @@ class GrantScopeSpec extends BaseFeatureSpec {
       val cookie = Session.encodeAsCookie(Session(Map("userId" -> userId)))
 
       When("I cancel to grant authority")
-      val response = Http(s"$serviceUrl/cancel?reqAuthId=${requestedAuthority.id}&state=$state")
+      val response = Http(s"$serviceUrl/oauth/cancel?reqAuthId=${requestedAuthority.id}&state=$state")
         .postData("")
         .cookie("PLAY_SESSION", cookie.value)
         .header("Csrf-Token", "nocheck")
