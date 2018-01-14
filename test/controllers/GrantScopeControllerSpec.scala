@@ -22,7 +22,7 @@ import scala.concurrent.Future.{failed, successful}
 
 class GrantScopeControllerSpec extends UnitSpec with MockitoSugar with BeforeAndAfterAll with GuiceOneServerPerSuite {
 
-  val application = EnvironmentApplication(UUID.randomUUID(), "myApp", PRODUCTION, "app description", ApplicationUrls(Seq("/redirectUri")))
+  val application = EnvironmentApplication(UUID.randomUUID(), "myApp", PRODUCTION, "app description", Seq("/redirectUri"))
 
   val authorizationCode = AuthorizationCode("aCode", DateTime.now())
   val userId = "userId"
@@ -30,7 +30,7 @@ class GrantScopeControllerSpec extends UnitSpec with MockitoSugar with BeforeAnd
   val completedRequestedAuthority = requestedAuthority.copy(authorizationCode = Some(authorizationCode), userId = Some(userId))
 
   val requestedAuthorityId = completedRequestedAuthority.id.toString
-  val grantAuthority = GrantAuthority(requestedAuthorityId, Seq(Scope("scope1", "View profile", "View name, address and email")), application)
+  val grantAuthority = GrantAuthority(requestedAuthorityId, Seq(Scope("scope1", "View profile")), application)
 
 
   trait Setup {

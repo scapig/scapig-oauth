@@ -40,8 +40,8 @@ class ScopeConnectorSpec extends UnitSpec with BeforeAndAfterAll with BeforeAndA
 
   "fetchScopes" should {
     "return the scopes" in new Setup {
-      val scope1 = Scope("scope1", "scope1 name", "scope1 desc")
-      val scope2 = Scope("scope2", "scope2 name", "scope2 desc")
+      val scope1 = Scope("scope1", "scope1 name")
+      val scope2 = Scope("scope2", "scope2 name")
 
       stubFor(get(urlPathEqualTo("/scope")).withQueryParam("keys", equalTo("scope1 scope2")).willReturn(aResponse()
         .withStatus(Status.OK)

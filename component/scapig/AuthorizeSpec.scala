@@ -17,8 +17,8 @@ class AuthorizeSpec extends BaseFeatureSpec {
   val scope = "aScope"
   val state = "aState"
   val redirectUri = "http://myApp/redirect"
-  val scopes = Seq(Scope(scope, "view profile", "view first name, last name and address"))
-  val application = EnvironmentApplication(UUID.randomUUID(), "appName", PRODUCTION, "description", ApplicationUrls(Seq("http://myApp")))
+  val scopes = Seq(Scope(scope, "view profile"))
+  val application = EnvironmentApplication(UUID.randomUUID(), "appName", PRODUCTION, "description", Seq("http://myApp"))
   val requestedAuthority = RequestedAuthority(UUID.randomUUID(), clientId, Seq(scope), redirectUri, application.environment)
 
   feature("authorize") {

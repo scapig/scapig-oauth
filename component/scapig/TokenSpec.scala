@@ -5,7 +5,6 @@ import java.util.UUID
 import models._
 import play.api.http.Status
 import play.api.libs.json.Json
-import play.mvc.Http.HeaderNames.CONTENT_TYPE
 import scapig.stubs.{MockApplication, MockDelegatedAuthority, MockRequestedAuthority}
 
 import scalaj.http.Http
@@ -15,8 +14,8 @@ class TokenSpec extends BaseFeatureSpec {
 
   val clientId = "aClientId"
   val clientSecret = "aClientSecret"
-  val application = EnvironmentApplication(UUID.randomUUID(), "appName", Environment.PRODUCTION, "description", ApplicationUrls(Seq("/redirectUris")))
-  val requestedAuthority = RequestedAuthority(UUID.randomUUID(), clientId, Seq("scope1"), application.applicationUrls.redirectUris.head, application.environment,
+  val application = EnvironmentApplication(UUID.randomUUID(), "appName", Environment.PRODUCTION, "description", Seq("/redirectUris"))
+  val requestedAuthority = RequestedAuthority(UUID.randomUUID(), clientId, Seq("scope1"), application.redirectUris.head, application.environment,
     Some(AuthorizationCode("aCode")), Some("aUserId"))
   val delegatedAuthorityRequest = DelegatedAuthorityRequest(requestedAuthority)
   val tokenResponse = TokenResponse("accessToken", "refreshToken", 14400, "scope1")

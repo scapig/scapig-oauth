@@ -27,7 +27,7 @@ class ApplicationConnectorSpec extends UnitSpec with BeforeAndAfterAll with Befo
   val clientId = "aClientId"
   val clientSecret = "aClientSecret"
   val authenticateRequest = AuthenticateRequest(clientId, clientSecret)
-  val application = EnvironmentApplication(UUID.randomUUID(), "appName", Environment.PRODUCTION, "description", ApplicationUrls(Seq("/redirectUris")))
+  val application = EnvironmentApplication(UUID.randomUUID(), "appName", Environment.PRODUCTION, "description", Seq("/redirectUris"))
 
   override def beforeAll {
     configureFor(port)

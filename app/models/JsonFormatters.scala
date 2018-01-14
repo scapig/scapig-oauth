@@ -23,7 +23,6 @@ object JsonFormatters {
   implicit val formatRequestedAuthority = Json.format[RequestedAuthority]
   implicit val formatCompleteRequestedAuthorityRequest = Json.format[CompleteRequestedAuthorityRequest]
 
-  implicit val formatApplicationUrls = Json.format[ApplicationUrls]
   implicit val formatEnvironmentApplication = Json.format[EnvironmentApplication]
   implicit val formatAuthenticateRequest = Json.format[AuthenticateRequest]
 

@@ -17,10 +17,10 @@ import scala.concurrent.Future.{failed, successful}
 class AuthorizationServiceSpec extends UnitSpec with MockitoSugar {
 
   val clientId = "clientId"
-  val scopes = Seq(Scope("scope1", "Scope 1", "Scope 1 Desc"))
+  val scopes = Seq(Scope("scope1", "Scope 1"))
   val scopeKeys = scopes.map(_.key)
   val redirectUri = "https://domain/path"
-  val environmentApplication = EnvironmentApplication(UUID.randomUUID(), "app name", PRODUCTION, "app description", ApplicationUrls(Seq(redirectUri)))
+  val environmentApplication = EnvironmentApplication(UUID.randomUUID(), "app name", PRODUCTION, "app description", Seq(redirectUri))
   val createRequestedAuthorityRequest = CreateRequestedAuthorityRequest(clientId, scopeKeys, redirectUri, PRODUCTION)
   val requestedAuthority = RequestedAuthority(UUID.randomUUID(), clientId, scopeKeys, redirectUri, PRODUCTION)
 

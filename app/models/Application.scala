@@ -8,8 +8,6 @@ case class EnvironmentApplication(id: UUID,
                                   name: String,
                                   environment: Environment,
                                   description: String,
-                                  applicationUrls: ApplicationUrls)
-
-case class ApplicationUrls(redirectUris: Seq[String])
+                                  redirectUris: Seq[String])
 
 case class AuthenticateRequest(clientId: String, clientSecret: String)

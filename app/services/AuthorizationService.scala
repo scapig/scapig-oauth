@@ -22,7 +22,7 @@ class AuthorizationService @Inject()(requestedAuthorityConnector: RequestedAutho
     (for {
       app <- appFuture
       scopes <- scopeFuture
-      _ = validateRedirectUri(app.applicationUrls.redirectUris, authorityRequest.redirectUri, authorityRequest.state)
+      _ = validateRedirectUri(app.redirectUris, authorityRequest.redirectUri, authorityRequest.state)
       _ = if(scopes.isEmpty) throw OauthValidationException(OAuthError(INVALID_SCOPE, "scope is invalid", authorityRequest.state))
       createAuthorityRequest = CreateRequestedAuthorityRequest(authorityRequest.clientId, scopes.map(_.key), authorityRequest.redirectUri,app.environment)
       requestedAuthority <- requestedAuthorityConnector.createRequestedAuthority(createAuthorityRequest)

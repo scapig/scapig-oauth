@@ -18,8 +18,8 @@ class GrantScopeSpec extends BaseFeatureSpec {
   val userId = "aUser"
   val redirectUri = "http://myApp/redirect"
   val authorizationCode = "aCode"
-  val scopes = Seq(Scope(scope, "view profile", "view first name, last name and address"))
-  val application = EnvironmentApplication(UUID.randomUUID(), "appName", PRODUCTION, "description", ApplicationUrls(Seq("http://myApp")))
+  val scopes = Seq(Scope(scope, "view profile"))
+  val application = EnvironmentApplication(UUID.randomUUID(), "appName", PRODUCTION, "description", Seq("http://myApp"))
   val requestedAuthority = RequestedAuthority(UUID.randomUUID(), clientId, Seq(scope), redirectUri, application.environment)
   val completedRequestedAuthority = requestedAuthority.copy(userId = Some(userId), authorizationCode = Some(AuthorizationCode(authorizationCode)))
 

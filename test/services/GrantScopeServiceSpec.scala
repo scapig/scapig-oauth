@@ -15,8 +15,8 @@ class GrantScopeServiceSpec extends UnitSpec with MockitoSugar {
 
   val requestedAuthority = RequestedAuthority(randomUUID(), "clientId", Seq("scope1"), "http://redirecturi", PRODUCTION)
   val requestedAuthorityId = requestedAuthority.id.toString
-  val scopes = Seq(Scope("scope1", "View profile", "View names and address"))
-  val application = EnvironmentApplication(randomUUID(), "myApp", PRODUCTION, "app description", ApplicationUrls(Seq("http://redirecturi")))
+  val scopes = Seq(Scope("scope1", "View profile"))
+  val application = EnvironmentApplication(randomUUID(), "myApp", PRODUCTION, "app description", Seq("http://redirecturi"))
 
   val userId = "userId"
   val completedRequestedAuthority = requestedAuthority.copy(userId = Some(userId), authorizationCode = Some(AuthorizationCode("aCode")))

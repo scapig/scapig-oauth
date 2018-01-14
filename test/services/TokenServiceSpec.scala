@@ -17,7 +17,7 @@ class TokenServiceSpec extends UnitSpec with MockitoSugar {
   val tokenResponse = TokenResponse("access_token", "refresh_token", 14400, "scope1")
 
   val environmentApplication = EnvironmentApplication(UUID.randomUUID(), "appName", Environment.PRODUCTION,
-    "appDescription", ApplicationUrls(Seq("/redirectUri")))
+    "appDescription", Seq("/redirectUri"))
 
   val requestedAuthority = RequestedAuthority(UUID.randomUUID(), tokenRequest.clientId, Seq("scope1"), tokenRequest.redirectUri,
     environmentApplication.environment, Some(AuthorizationCode(tokenRequest.code)), Some("userId"))
