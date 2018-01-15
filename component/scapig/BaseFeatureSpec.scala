@@ -36,6 +36,7 @@ with GivenWhenThen with BeforeAndAfterEach with BeforeAndAfterAll with GuiceOneS
     .configure("services.scope.port" -> "7004")
     .configure("loginUrl" -> "http://localhost:15000/login")
     .configure("oauthUrl" -> "http://localhost:14680")
+    .configure("silhouette.authenticator.useFingerprinting" -> "false")
     .build()
 
   val timeout = Duration(5, TimeUnit.SECONDS)
