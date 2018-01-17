@@ -1,38 +1,48 @@
+@import org.webjars.play.WebJarsUtil
 
-@(grantAuthority: GrantAuthority, username: String, maybeState: Option[String] = None)(implicit request: Request[_]) {
+@(grantAuthority: GrantAuthority, username: String, maybeState: Option[String] = None)(implicit request: Request[_], webJarsUtil: WebJarsUtil, assets: AssetsFinder)
 
-    <html>
-        <head><title>Grant Scope</title></head>
-        <body>
-            <div class="content__body">
-                <h1>Authority to interact on your behalf</h1>
-
-                <p>The <strong>@grantAuthority.application.name</strong> software application is requesting to do the following:</p>
-
-                <div class="form-field">
-                    <ul>
-                    @grantAuthority.scopes.map { scope =>
-                        <li class="bullets">@scope.name</li>
-                    }
-                    </ul>
-                </div>
-
-                <p>It will be able to do the above for 18 months from when you grant authority.</p>
-
-                @helper.form(action = Call("POST", "/grantscope")) {
-
-                    @helper.CSRF.formField
-                    <input type="hidden" name="reqAuthId" id="reqAuthId" value="@{grantAuthority.requestedAuthorityId}">
-                    @maybeState.map {st =>
-                        <input type="hidden" name="state" id="state" value="@st">
-                    }
-
-                    <div class="form-field">
-                        <button id="authorise" class="button" type="submit">Grant authority</button>
-                        <a id="deny" class="button button--link" href="/oauth/cancel?reqAuthId=@{grantAuthority.requestedAuthorityId}@maybeState.map {st =>&state=@st}" data-sso="false">Do not grant authority</a>
-                    </div>
-                }
+    @main = {
+        <section>
+            <div class="container text-center" style="padding-top: 50px; min-height:300px;">
+                <h1 class="s-header"><strong>GRANT AUTHORITY TO @grantAuthority.application.name.toUpperCase()</strong></h1>
             </div>
-        </body>
-    </html>
-}
+        </section>
+        <section style="background-color: white;">
+            <div class="container landing">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+
+                        <p>The <strong>@grantAuthority.application.name</strong> software application is requesting to do the following:</p>
+
+                        <div class="form-field">
+                            <ul>
+                            @grantAuthority.scopes.map { scope =>
+                                <li class="bullets">@scope.name</li>
+                            }
+                            </ul>
+                        </div>
+
+                        <p>It will be able to do the above for 18 months from when you grant authority.</p>
+                        <br/>
+
+                        @helper.form(action = Call("POST", "/oauth/grantscope")) {
+
+                            @helper.CSRF.formField
+                            <input type="hidden" name="reqAuthId" id="reqAuthId" value="@{grantAuthority.requestedAuthorityId}">
+                            @maybeState.map {st =>
+                                <input type="hidden" name="state" id="state" value="@st">
+                            }
+
+                            <div class="form-field">
+                                <button class="btn btn-primary" id="authorise" type="submit" role="button">Grant authority</button>
+                                <a class="btn btn-link" id="deny" href="/oauth/cancel?reqAuthId=@{grantAuthority.requestedAuthorityId}@maybeState.map {st =>&state=@st}">Do not grant authority</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+
+    @include.template("Grant Scope", main)

@@ -16,6 +16,10 @@ scalaVersion := "2.12.2"
 libraryDependencies ++= Seq( ws, guice )
 libraryDependencies += "com.typesafe.play" %% "play-json-joda" % "2.6.0"
 
+libraryDependencies += "org.webjars" %% "webjars-play" % "2.6.1"
+libraryDependencies += "org.webjars" % "bootstrap" % "3.3.7-1" exclude("org.webjars", "jquery")
+libraryDependencies += "org.webjars" % "jquery" % "3.2.1"
+
 libraryDependencies += "com.mohiva" %% "play-silhouette" % "5.0.2"
 libraryDependencies += "com.mohiva" %% "play-silhouette-password-bcrypt" % "5.0.2"
 libraryDependencies += "com.mohiva" %% "play-silhouette-persistence" % "5.0.2"

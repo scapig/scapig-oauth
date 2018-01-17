@@ -6,6 +6,7 @@ import javax.inject.{Inject, Singleton}
 import com.mohiva.play.silhouette.api.Silhouette
 import config.{AppContext, DefaultEnv}
 import models.RequestedAuthorityNotFound
+import org.webjars.play.WebJarsUtil
 import play.api.mvc._
 import services.GrantScopeService
 
@@ -17,7 +18,9 @@ import scala.concurrent.Future
 class GrantScopeController @Inject()(cc: ControllerComponents,
                                      grantScopeService: GrantScopeService,
                                      appContext: AppContext,
-                                     silhouette: Silhouette[DefaultEnv]) extends AbstractController(cc) with CommonControllers {
+                                     silhouette: Silhouette[DefaultEnv])
+                                    (implicit webJarsUtil: WebJarsUtil, assets: AssetsFinder)
+  extends AbstractController(cc) with CommonControllers {
 
   val timedOutTitle = "Session Expired"
   val timedOutHeading = "Your session has ended due to inactivity"

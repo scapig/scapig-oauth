@@ -1,13 +1,25 @@
+@import org.webjars.play.WebJarsUtil
 
-@(title: String, heading: String, message: String) {
+@(title: String, heading: String, message: String)(implicit webJarsUtil: WebJarsUtil, assets: AssetsFinder)
 
-    <html>
-        <head><title>@title</title></head>
-        <body>
-            <div class="content__body">
-                <h1>@heading</h1>
-                <p>@message</p>
+@main = {
+    <section>
+        <div class="container text-center" style="padding-top: 50px; min-height:300px;">
+            <h1 class="s-header"><strong>@title</strong></h1>
+        </div>
+    </section>
+    <section style="background-color: white;">
+        <div class="container landing">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="well text-center">
+                        <p>@heading</p>
+                        <p>@message</p>
+                    </div>
+                </div>
             </div>
-        </body>
-    </html>
+        </div>
+    </section>
 }
+
+@include.template(title, main)
