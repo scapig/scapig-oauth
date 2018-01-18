@@ -22,7 +22,8 @@ class GrantScopeSpec extends BaseFeatureSpec {
   val requestedAuthority = RequestedAuthority(UUID.randomUUID(), clientId, Seq(scope), redirectUri, application.environment)
   val completedRequestedAuthority = requestedAuthority.copy(userId = Some(userId), authorizationCode = Some(AuthorizationCode(authorizationCode)))
 
-  val loggedInCookie = "1-fb8f9f87d17c6c106400984db7ec0073408bcca8-1-mnDqHCGUhETPGMqacoUmGHvgLP9i4O7oj3492jOgXqUI0nJd9LEBvMe7j/OE7hFAf1AvKleeZ/T8ZOse4zhYRWBlbGKmehzcbyIobgGrnhA5wdFtSbyvc71GKhqWQqwKUDhm+PZI+U+e4UixL4m4tuGfn/to2vjYeZVtNWY7FiHGzRMH5ner/Lx6XWMSIqzNDdvI6PO2BJUy2si/aAzbOIHwCe8daoOc33oh2oygOH4sUtvmhqGIc3TNEcFPA1Z042BvJWIAqWpHfzDviab/44v3p16M6OkiBcsllDcTvmou11goB3TVFslXl7iBWYIPxJJD7iOX6XGOXeal0T7CKoJZ1uZy444LrUZHa6sacWTvVzD9pLABLZ3zyWvhctycVTeKIKTVPmdHgwe6G2c2CDKI0DpYK6ygAUlraBEUaO9OsWGcqt+KGw8OirarhCSNoSE/fsPBKSpHqsEgNbSvAz8faIjrsPsNROX+sfsDw+TH74URq7LcMfZpbIWCVDbqRItfsD3PZA0ml2ZneygCy3E3YwJX7hwH4Bf5jjf0z62E+1pYrIM999mxuYgH58xM2qmAuk5LpSetvi+dUeH/bNiDmfkVs6gjUAUtB/CMwBwJDGh3lr4OrTBQYuAIS2i+K5yHZEf0Y7SiDV0xdaTvxI4D4/KjYyuHqQhF0eUqPTDKrw=="
+  //Cookie created from scapig-oauth-login with large expiry
+  val loggedInCookie = "1-bd453e36d042af87157f64188f0179b9fe9786e5-1-4zpqqX/XceFZr9yfYOgDbCitH1RIrCLXGWgkgQjkCtCXPwb/KLm+4/G1gfjrJaTnh7H0Z1NC/NmcLkRQNtR6xWchdnuwsuRefA87cR89TvqMQNAhk7mOVtPHTVmQTMpXoeWGjUvANSNUWEE3M8SoAyG+5sFaOT7moGuqeOZBnEKi5HE0xeepFIrZybfaPKUhP1kIoZtf95hhd4pD09O+KVoFu0WJ61pctvCedfsN2lw6JDQ25Twvr6nK/l2rEguU7ylwxnktPwyDun4ISkR9YJa3I1TJECne2Lh4S7ujQ6OiD3RZJlQIFCqvzycJi6vzmk4yoNt34R92qmNPSXsyouLGjMlk8ZMpvXUx0vuT1NXSDb8n3xGsu7605AGrWlE1ianOSnEYYNBnVR+4mcu2Duau/1ZqpQmnEl4GVm0OCPNHEQghdnDtAxLnOmYl8zdYqSYrLTwpFAnZplEC4DoBUmIVhASeuDPDM8wiLTEGscnhUgUBd62YAMRkgBeZGlqQcXUaMLA3+yA4unXrH3wcyYQNqECRi8I8qeKXbOMw2/l7JfleY4eEy+iumlP9JgJnkpHyK49A+htHUkLABM+OvFaAOnoQ4LtSbPSFCtkjVxXkq8b/IAE8dVAMerVuGh953wvenIt5Hc9HUZbQRlYVwnY0FkFhQAh9TRIxk/v2Qzvdyu4ZjIJm"
 
   feature("show grantscope") {
 
@@ -47,7 +48,7 @@ class GrantScopeSpec extends BaseFeatureSpec {
 
       Then("I receive a 200 (Ok) with the grant page")
       response.code shouldBe Status.OK
-      response.body should include ("Authority to interact on your behalf")
+      response.body should include ("Grant Scope")
     }
 
     scenario("logged out user") {
@@ -127,10 +128,7 @@ class GrantScopeSpec extends BaseFeatureSpec {
       MockRequestedAuthority.willReturnRequestedAuthorityForId(requestedAuthority)
 
       When("I cancel to grant authority")
-      val response = Http(s"$serviceUrl/oauth/cancel?reqAuthId=${requestedAuthority.id}&state=$state")
-        .postData("")
-        .header("Csrf-Token", "nocheck")
-        .asString
+      val response = Http(s"$serviceUrl/oauth/cancel?reqAuthId=${requestedAuthority.id}&state=$state").asString
 
       Then("I am redirected to the redirect uri with the ACCESS_DENIED error")
       response.code shouldBe Status.FOUND
