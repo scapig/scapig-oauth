@@ -11,5 +11,4 @@ POST    /oauth/grantscope                 @controllers.GrantScopeController.acce
 
 GET     /oauth/cancel                     @controllers.GrantScopeController.cancel(reqAuthId, state: Option[String])
 
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
-->          /webjars                         webjars.Routes
+->      /oauth/webjars                    webjars.Routes

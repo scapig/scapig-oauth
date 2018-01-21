@@ -1,6 +1,6 @@
 @import org.webjars.play.WebJarsUtil
 
-@(grantAuthority: GrantAuthority, username: String, maybeState: Option[String] = None)(implicit request: Request[_], webJarsUtil: WebJarsUtil, assets: AssetsFinder)
+@(grantAuthority: GrantAuthority, username: String, maybeState: Option[String] = None)(implicit request: Request[_], webJarsUtil: WebJarsUtil)
 
     @main = {
         <section>

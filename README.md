@@ -11,7 +11,14 @@ sbt universal:package-zip-tarball
 docker build -t scapig-oauth .
 ``
 
+## Publishing
+``
+docker tag scapig-oauth scapig/scapig-oauth:VERSION
+docker login
+docker push scapig/scapig-oauth:VERSION
+``
+
 ## Running
 ``
-docker run -p7040:7040 -i -a stdin -a stdout -a stderr scapig-oauth sh start-docker.sh
+docker run -p9015:9015 -d scapig/scapig-oauth:VERSION
 ``

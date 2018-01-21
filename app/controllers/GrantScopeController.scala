@@ -19,7 +19,7 @@ class GrantScopeController @Inject()(cc: ControllerComponents,
                                      grantScopeService: GrantScopeService,
                                      appContext: AppContext,
                                      silhouette: Silhouette[DefaultEnv])
-                                    (implicit webJarsUtil: WebJarsUtil, assets: AssetsFinder)
+                                    (implicit webJarsUtil: WebJarsUtil)
   extends AbstractController(cc) with CommonControllers {
 
   val timedOutTitle = "Session Expired"

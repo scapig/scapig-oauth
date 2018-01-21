@@ -1,12 +1,12 @@
 @import org.webjars.play.WebJarsUtil
 
-@(title: String, html: Html)(implicit webJarsUtil: WebJarsUtil, assets: AssetsFinder)
+@(title: String, html: Html)(implicit webJarsUtil: WebJarsUtil)
 <html>
     <head>
         <title>@title</title>
             @Html(webJarsUtil.css("bootstrap.min.css"))
             @Html(webJarsUtil.css("bootstrap-theme.min.css"))
-        <link rel="stylesheet" href="@assets.path("styles/scapig.css")">
+        <link rel="stylesheet" href="/oauth/assets/styles/scapig.css">
     </head>
     <body>
         <header class="navbar navbar-inverse navbar-fixed-top" role="navigation">
