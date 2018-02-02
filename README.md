@@ -13,12 +13,12 @@ docker build -t scapig-oauth .
 
 ## Publishing
 ``
-docker tag scapig-oauth scapig/scapig-oauth:VERSION
+docker tag scapig-oauth scapig/scapig-oauth
 docker login
-docker push scapig/scapig-oauth:VERSION
+docker push scapig/scapig-oauth
 ``
 
 ## Running
 ``
-docker run -p9015:9015 -d scapig/scapig-oauth:VERSION
+docker run -p9015:9015 -d scapig/scapig-oauth
 ``
