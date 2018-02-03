@@ -177,8 +177,8 @@ class GrantScopeControllerSpec extends UnitSpec with MockitoSugar with BeforeAnd
   }
 
   private def verifyUserLoggedOut(result: Result) = {
-    result.newCookies.head.name shouldBe "PLAY_SESSION"
-    result.newCookies.head.maxAge shouldBe Some(-86400)
+    result.newCookies.map(_.name) shouldBe Seq("PLAY_SESSION", "authenticator")
+    result.newCookies.map(_.maxAge) shouldBe Seq(Some(-86400), Some(-86400))
   }
 
 }

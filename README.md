@@ -1,5 +1,8 @@
 ## scapig-oauth
 
+This is the microservice which coordinates the actions required for the Oauth 2.0 specs for the API Gateway http://scapig.com.
+
+
 ## Building
 ``
 sbt clean test it:test component:test
